@@ -120,7 +120,7 @@ const DEFAULT_CONTENT: PortfolioContent = {
     videoUrl: '',
   },
   about: {
-    text: "Hi! My name is Aurora. I am currently a student at United States International University Africa.\n\nSince I was little, I have been drawing, doing it both as a hobby and as a commission.\n\nMy works span digital illustration, short comics, character design, and animation — all fuelled by a love for storytelling and visual experimentation.",
+    text: "Hi! My name is Aurora.\n\nSince I was little, I have been drawing, doing it both as a hobby and as a commission.\n\nMy works span digital illustration, short comics, character design, and animation — all fuelled by a love for storytelling and visual experimentation.",
     image: aboutPage,
     profileImage: '',
   },
@@ -309,13 +309,22 @@ export function ContentProvider({ children }: { children: ReactNode }) {
       const saved = localStorage.getItem(STORAGE_KEY);
       if (saved) {
         const p = JSON.parse(saved);
+        const about = { ...DEFAULT_CONTENT.about, ...(p.about ?? {}) };
+        // Migration: strip old university references from bio
+        if (
+          about.text.includes('pre-university') ||
+          about.text.includes('UNIMAS') ||
+          about.text.includes('United States International University Africa')
+        ) {
+          about.text = DEFAULT_CONTENT.about.text;
+        }
         return {
           ...DEFAULT_CONTENT,
           ...p,
           nav:      { ...DEFAULT_CONTENT.nav,      ...(p.nav      ?? {}) },
           hero:     { ...DEFAULT_CONTENT.hero,     ...(p.hero     ?? {}) },
           showreel: { ...DEFAULT_CONTENT.showreel, ...(p.showreel ?? {}) },
-          about:    { ...DEFAULT_CONTENT.about,    ...(p.about    ?? {}) },
+          about,
           contact:  { ...DEFAULT_CONTENT.contact,  ...(p.contact  ?? {}) },
           footer:   { ...DEFAULT_CONTENT.footer,   ...(p.footer   ?? {}) },
         };

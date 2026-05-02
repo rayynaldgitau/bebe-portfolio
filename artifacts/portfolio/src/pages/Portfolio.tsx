@@ -744,11 +744,13 @@ export default function Portfolio() {
               </div>
               <div className="text-center">
                 <p style={{ fontFamily: SERIF, color: BROWN, fontStyle: 'italic', fontSize: '1.25rem' }}>
-                  Bahleyh
+                  {content.nav.brandName.replace("'s", '') || 'Bahleyh'}
                 </p>
-                <p style={{ fontFamily: SANS, color: MAROON, fontSize: '0.7rem', letterSpacing: '0.2em', textTransform: 'uppercase', marginTop: 2 }}>
-                  Digital Artist
-                </p>
+                {(content.about as any).tagline && (
+                  <p style={{ fontFamily: SANS, color: MAROON, fontSize: '0.7rem', letterSpacing: '0.2em', textTransform: 'uppercase', marginTop: 2 }}>
+                    {(content.about as any).tagline}
+                  </p>
+                )}
               </div>
             </motion.div>
 

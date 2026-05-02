@@ -279,6 +279,13 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
                         <p className="text-xs text-gray-500 mt-2">Shown as a circular avatar beside your name in the About section.</p>
                       </div>
 
+                      {/* Tagline */}
+                      <div>
+                        <label className={labelCls}>Tagline</label>
+                        <input className={inputCls} value={(draft.about as any).tagline ?? ''} onChange={e => update('about.tagline', e.target.value)} placeholder="e.g. Digital Artist & Animator" />
+                        <p className="text-xs text-gray-500 mt-1">Shown under your name in the About section.</p>
+                      </div>
+
                       {/* Bio text */}
                       <div>
                         <label className={labelCls}>Bio</label>

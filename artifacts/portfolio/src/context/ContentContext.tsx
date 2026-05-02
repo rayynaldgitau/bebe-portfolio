@@ -93,7 +93,7 @@ export interface PortfolioContent {
   nav: { brandName: string };
   hero: { title: string; subtitle: string; coverImage: string };
   showreel: { title: string; description: string; videoUrl: string };
-  about: { text: string; image: string; profileImage: string };
+  about: { text: string; image: string; profileImage: string; tagline: string };
   stats: Stat[];
   projects: Project[];
   services: Service[];
@@ -123,6 +123,7 @@ const DEFAULT_CONTENT: PortfolioContent = {
     text: "Hi! My name is Aurora.\n\nSince I was little, I have been drawing, doing it both as a hobby and as a commission.\n\nMy works span digital illustration, short comics, character design, and animation — all fuelled by a love for storytelling and visual experimentation.",
     image: aboutPage,
     profileImage: '',
+    tagline: 'Digital Artist & Animator',
   },
   stats: [
     { id: '1', label: 'Works in Portfolio', value: 9, suffix: '', prefix: '' },

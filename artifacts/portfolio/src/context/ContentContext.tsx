@@ -50,6 +50,17 @@ export interface ProcessStep {
   icon: string;
 }
 
+export interface CommissionType {
+  id: string;
+  title: string;
+  description: string;
+  price: string;
+  currency: string;
+  turnaround: string;
+  includes: string[];
+  available: boolean;
+}
+
 export interface PortfolioContent {
   nav: { brandName: string };
   hero: { title: string; subtitle: string; coverImage: string };
@@ -60,6 +71,7 @@ export interface PortfolioContent {
   skills: Skill[];
   testimonials: Testimonial[];
   processSteps: ProcessStep[];
+  commissions: CommissionType[];
   contact: { email: string; github: string; linkedin: string; tiktok: string; instagram: string };
   footer: { text: string };
 }
@@ -177,6 +189,58 @@ const DEFAULT_CONTENT: PortfolioContent = {
     { id: '2', title: 'Sketch', description: 'Rough line work and layout — building the foundation of the piece.', icon: 'Pencil' },
     { id: '3', title: 'Lineart', description: 'Clean, refined line work that defines the final shapes and details.', icon: 'Star' },
     { id: '4', title: 'Colour & Finish', description: 'Applying colour, shading, lighting, and final polish to bring it to life.', icon: 'CheckCircle' },
+  ],
+  commissions: [
+    {
+      id: '1',
+      title: 'Sketch',
+      description: 'A clean rough sketch in black and white. Great for quick character concepts.',
+      price: '20',
+      currency: 'RM',
+      turnaround: '3–5 days',
+      includes: ['1 character', 'Simple background or none', '1 revision round'],
+      available: true,
+    },
+    {
+      id: '2',
+      title: 'Line Art',
+      description: 'Crisp, clean linework with no colouring. Ideal for those who want to colour themselves.',
+      price: '35',
+      currency: 'RM',
+      turnaround: '5–7 days',
+      includes: ['1 character', 'Clean lineart', 'Transparent or white background', '2 revision rounds'],
+      available: true,
+    },
+    {
+      id: '3',
+      title: 'Full Colour — Flat',
+      description: 'Flat colours with minimal shading. Clean, vibrant and striking.',
+      price: '55',
+      currency: 'RM',
+      turnaround: '7–10 days',
+      includes: ['1 character', 'Flat colour + basic shading', 'Simple background', '2 revision rounds'],
+      available: true,
+    },
+    {
+      id: '4',
+      title: 'Full Colour — Shaded',
+      description: 'Full rendering with detailed shading, lighting, and a finished background.',
+      price: '80',
+      currency: 'RM',
+      turnaround: '10–14 days',
+      includes: ['1 character', 'Full rendering & shading', 'Detailed background', '3 revision rounds'],
+      available: true,
+    },
+    {
+      id: '5',
+      title: 'Comic Page',
+      description: 'A single illustrated comic page with panelling, dialogue, and ink-style art.',
+      price: '90',
+      currency: 'RM',
+      turnaround: '7–14 days per page',
+      includes: ['Up to 6 panels', 'Characters + backgrounds', 'Lettering included', '2 revision rounds'],
+      available: false,
+    },
   ],
   contact: {
     email: 'aurora@example.com',

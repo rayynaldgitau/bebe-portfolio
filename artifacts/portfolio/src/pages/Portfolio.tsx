@@ -1,7 +1,96 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { X, ExternalLink, Mail, Github, Settings } from 'lucide-react';
+import { X, ExternalLink, Mail, Github, Settings, Send } from 'lucide-react';
 import { useContent } from '../context/ContentContext';
+
+function CommissionForm({ email, tiers }: { email: string; tiers: string[] }) {
+  const [form, setForm] = useState({ name: '', replyEmail: '', tier: tiers[0] ?? '', idea: '' });
+  const [sent, setSent] = useState(false);
+
+  const MAROON = '#6B1D2A';
+  const BROWN = '#3D2B1F';
+  const BROWN_LIGHT = '#6B5040';
+  const SAND_LIGHT = '#E8DDD0';
+  const CREAM = '#F5F0E8';
+  const SERIF = "'Playfair Display', Georgia, serif";
+  const SANS = "'Lato', 'Inter', sans-serif";
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const subject = encodeURIComponent(`Commission Request — ${form.tier}`);
+    const body = encodeURIComponent(
+      `Hi Bahleyh!\n\nName: ${form.name}\nReply to: ${form.replyEmail}\nTier: ${form.tier}\n\nIdea / Description:\n${form.idea}`
+    );
+    window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
+    setSent(true);
+    setTimeout(() => setSent(false), 4000);
+  };
+
+  const inputStyle: React.CSSProperties = {
+    width: '100%', padding: '10px 14px', backgroundColor: '#fff',
+    border: `1px solid ${SAND_LIGHT}`, borderRadius: '8px',
+    color: BROWN, fontFamily: SANS, fontSize: '0.9rem', outline: 'none',
+  };
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      className="rounded-2xl p-8 md:p-10"
+      style={{ backgroundColor: SAND_LIGHT, border: `1px solid #d9cfc4` }}
+    >
+      <h3 className="text-2xl mb-1" style={{ fontFamily: SERIF, color: BROWN, fontStyle: 'italic' }}>
+        Send a Request
+      </h3>
+      <p className="text-sm mb-6" style={{ color: BROWN_LIGHT }}>
+        Fill in the form and it will open your email client with everything pre-filled.
+      </p>
+      <form onSubmit={handleSubmit} className="grid md:grid-cols-2 gap-4">
+        <div>
+          <label className="block text-xs font-bold tracking-widest uppercase mb-1.5" style={{ color: MAROON, fontFamily: SANS, letterSpacing: '0.15em' }}>Your Name</label>
+          <input required style={inputStyle} placeholder="e.g. Sam" value={form.name} onChange={e => setForm(p => ({ ...p, name: e.target.value }))} />
+        </div>
+        <div>
+          <label className="block text-xs font-bold tracking-widest uppercase mb-1.5" style={{ color: MAROON, fontFamily: SANS, letterSpacing: '0.15em' }}>Your Email</label>
+          <input required type="email" style={inputStyle} placeholder="you@email.com" value={form.replyEmail} onChange={e => setForm(p => ({ ...p, replyEmail: e.target.value }))} />
+        </div>
+        <div>
+          <label className="block text-xs font-bold tracking-widest uppercase mb-1.5" style={{ color: MAROON, fontFamily: SANS, letterSpacing: '0.15em' }}>Commission Tier</label>
+          <select required style={{ ...inputStyle, cursor: 'pointer' }} value={form.tier} onChange={e => setForm(p => ({ ...p, tier: e.target.value }))}>
+            {tiers.map(t => <option key={t} value={t}>{t}</option>)}
+          </select>
+        </div>
+        <div className="md:col-span-2">
+          <label className="block text-xs font-bold tracking-widest uppercase mb-1.5" style={{ color: MAROON, fontFamily: SANS, letterSpacing: '0.15em' }}>Your Idea / Description</label>
+          <textarea required rows={4} style={{ ...inputStyle, resize: 'vertical' }} placeholder="Tell me about your character, references, mood, any preferences..." value={form.idea} onChange={e => setForm(p => ({ ...p, idea: e.target.value }))} />
+        </div>
+        <div className="md:col-span-2 flex items-center gap-4">
+          <motion.button
+            type="submit"
+            className="flex items-center gap-2 px-7 py-3 rounded-full text-sm font-medium"
+            style={{ backgroundColor: MAROON, color: CREAM, fontFamily: SANS }}
+            whileHover={{ scale: 1.04 }}
+            whileTap={{ scale: 0.97 }}
+          >
+            <Send className="w-4 h-4" />
+            Send Request
+          </motion.button>
+          {sent && (
+            <motion.span
+              initial={{ opacity: 0, x: -10 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="text-sm"
+              style={{ color: MAROON, fontFamily: SANS }}
+            >
+              ✓ Email client opened!
+            </motion.span>
+          )}
+        </div>
+      </form>
+    </motion.div>
+  );
+}
 
 const SERIF = "'Playfair Display', Georgia, serif";
 const SANS = "'Lato', 'Inter', sans-serif";
@@ -140,8 +229,8 @@ export default function Portfolio() {
 
   const navLinks = [
     { href: '#works', label: 'Works' },
+    { href: '#commissions', label: 'Commissions' },
     { href: '#about', label: 'About' },
-    { href: '#skills', label: 'Skills' },
     { href: '#contact', label: 'Contact' },
   ];
 
@@ -399,6 +488,97 @@ export default function Portfolio() {
           {filtered.map((work, i) => (
             <WorkCard key={work.id} work={work} index={i} />
           ))}
+        </div>
+      </section>
+
+      {/* ── COMMISSIONS ── */}
+      <section id="commissions" className="py-20 px-6 md:px-16" style={{ backgroundColor: CREAM }}>
+        <div className="max-w-5xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="mb-4"
+          >
+            <h2 className="text-4xl md:text-5xl mb-2" style={{ fontFamily: SERIF, color: BROWN, fontStyle: 'italic' }}>
+              Commissions
+            </h2>
+            <div className="w-12 h-px mt-4 mb-6" style={{ backgroundColor: MAROON }} />
+            <p className="text-sm leading-relaxed max-w-xl" style={{ color: BROWN_LIGHT }}>
+              Interested in a custom piece? Choose a tier below and send a request — I'll get back to you as soon as possible.
+            </p>
+          </motion.div>
+
+          {/* Tier cards */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-10 mb-16">
+            {content.commissions.map((tier, i) => (
+              <motion.div
+                key={tier.id}
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.08 }}
+                className="relative flex flex-col rounded-xl overflow-hidden border"
+                style={{
+                  borderColor: tier.available ? SAND_DARK : '#ddd',
+                  backgroundColor: tier.available ? '#fff' : '#f9f6f2',
+                  opacity: tier.available ? 1 : 0.65,
+                }}
+              >
+                {!tier.available && (
+                  <div
+                    className="absolute top-3 right-3 text-xs font-bold tracking-widest uppercase px-2 py-0.5 rounded-full"
+                    style={{ backgroundColor: SAND, color: BROWN_LIGHT, letterSpacing: '0.12em', fontFamily: SANS }}
+                  >
+                    Closed
+                  </div>
+                )}
+                <div className="px-6 pt-6 pb-4 flex-1">
+                  <p
+                    className="text-xs font-bold tracking-widest uppercase mb-2"
+                    style={{ color: MAROON, fontFamily: SANS, letterSpacing: '0.18em' }}
+                  >
+                    {tier.currency} {tier.price}
+                  </p>
+                  <h3 className="text-xl mb-2" style={{ fontFamily: SERIF, color: BROWN }}>{tier.title}</h3>
+                  <p className="text-sm leading-relaxed mb-4" style={{ color: BROWN_LIGHT }}>{tier.description}</p>
+                  <ul className="space-y-1.5 mb-4">
+                    {tier.includes.map((item, j) => (
+                      <li key={j} className="flex items-start gap-2 text-sm" style={{ color: BROWN_LIGHT }}>
+                        <span style={{ color: MAROON, marginTop: '2px', flexShrink: 0 }}>✦</span>
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <div className="px-6 pb-5">
+                  <div
+                    className="text-xs tracking-widest uppercase mb-4"
+                    style={{ color: SAND_DARK, fontFamily: SANS, letterSpacing: '0.15em' }}
+                  >
+                    Est. {tier.turnaround}
+                  </div>
+                  <a
+                    href={tier.available
+                      ? `mailto:${content.contact.email}?subject=Commission Request — ${tier.title}&body=Hi Bahleyh!%0A%0AI'm interested in a ${tier.title} commission.%0A%0AHere's what I have in mind:%0A%0A[Please describe your idea, references, and any preferences]`
+                      : undefined}
+                    className="block text-center py-2.5 rounded-lg text-sm font-medium transition-all"
+                    style={{
+                      backgroundColor: tier.available ? MAROON : SAND,
+                      color: tier.available ? CREAM : BROWN_LIGHT,
+                      cursor: tier.available ? 'pointer' : 'default',
+                      fontFamily: SANS,
+                    }}
+                  >
+                    {tier.available ? 'Request This Tier' : 'Currently Closed'}
+                  </a>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* Request form */}
+          <CommissionForm email={content.contact.email} tiers={content.commissions.filter(t => t.available).map(t => t.title)} />
         </div>
       </section>
 

@@ -5,21 +5,21 @@ import {
   BarChart2, MessageSquare, User, Mail, Lock, LogOut,
   Plus, Trash2, Save, RotateCcw, ChevronDown, ChevronUp, Eye
 } from 'lucide-react';
-import { useContent, PortfolioContent, Project, Service, Skill, Stat, Testimonial, ProcessStep } from '../context/ContentContext';
+import { useContent, PortfolioContent, Project, Service, Skill, Stat, Testimonial, ProcessStep, CommissionType } from '../context/ContentContext';
 import { changePassword, clearAdminSession } from '../lib/auth';
 
 interface AdminDashboardProps {
   onLogout: () => void;
 }
 
-type TabId = 'general' | 'projects' | 'services' | 'skills' | 'stats' | 'testimonials' | 'process' | 'contact' | 'security';
+type TabId = 'general' | 'projects' | 'services' | 'skills' | 'stats' | 'testimonials' | 'process' | 'commissions' | 'contact' | 'security';
 
 const TABS: { id: TabId; label: string; icon: any }[] = [
   { id: 'general', label: 'General', icon: LayoutDashboard },
   { id: 'projects', label: 'Projects', icon: Image },
-  { id: 'services', label: 'Services', icon: Wrench },
+  { id: 'commissions', label: 'Commissions', icon: Star },
   { id: 'skills', label: 'Skills', icon: BarChart2 },
-  { id: 'stats', label: 'Stats', icon: Star },
+  { id: 'stats', label: 'Stats', icon: Users },
   { id: 'testimonials', label: 'Testimonials', icon: MessageSquare },
   { id: 'process', label: 'Process', icon: GitBranch },
   { id: 'contact', label: 'Contact', icon: Mail },
@@ -382,6 +382,75 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
                           <label className={labelCls}>Description</label>
                           <textarea className={inputCls} rows={3} value={step.description} onChange={e => setDraft(prev => ({ ...prev, processSteps: prev.processSteps.map(x => x.id === step.id ? { ...x, description: e.target.value } : x) }))} />
                         </div>
+                      </div>
+                    </CollapsibleCard>
+                  ))}
+                </div>
+              )}
+
+              {/* COMMISSIONS */}
+              {activeTab === 'commissions' && (
+                <div className="space-y-4 max-w-2xl">
+                  <div className="flex justify-between items-center">
+                    <p className="text-gray-400 text-sm">{draft.commissions?.length ?? 0} tiers</p>
+                    <button
+                      onClick={() => setDraft(p => ({ ...p, commissions: [...(p.commissions ?? []), { id: uid(), title: 'New Tier', description: '', price: '0', currency: 'RM', turnaround: '7 days', includes: ['1 character'], available: true }] }))}
+                      className="flex items-center gap-2 px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg text-sm transition"
+                    >
+                      <Plus className="w-4 h-4" /> Add Tier
+                    </button>
+                  </div>
+                  {(draft.commissions ?? []).map((tier, i) => (
+                    <CollapsibleCard
+                      key={tier.id}
+                      id={tier.id}
+                      title={tier.title}
+                      subtitle={`${tier.currency} ${tier.price} · ${tier.available ? 'Open' : 'Closed'}`}
+                      expanded={expandedId === tier.id}
+                      onToggle={() => setExpandedId(expandedId === tier.id ? null : tier.id)}
+                      onDelete={() => setDraft(prev => ({ ...prev, commissions: prev.commissions.filter(x => x.id !== tier.id) }))}
+                    >
+                      <div className="space-y-3">
+                        <div className="grid grid-cols-2 gap-3">
+                          <div>
+                            <label className={labelCls}>Title</label>
+                            <input className={inputCls} value={tier.title} onChange={e => setDraft(p => ({ ...p, commissions: p.commissions.map(x => x.id === tier.id ? { ...x, title: e.target.value } : x) }))} />
+                          </div>
+                          <div>
+                            <label className={labelCls}>Price</label>
+                            <input className={inputCls} value={tier.price} onChange={e => setDraft(p => ({ ...p, commissions: p.commissions.map(x => x.id === tier.id ? { ...x, price: e.target.value } : x) }))} />
+                          </div>
+                          <div>
+                            <label className={labelCls}>Currency</label>
+                            <input className={inputCls} value={tier.currency} placeholder="RM" onChange={e => setDraft(p => ({ ...p, commissions: p.commissions.map(x => x.id === tier.id ? { ...x, currency: e.target.value } : x) }))} />
+                          </div>
+                          <div>
+                            <label className={labelCls}>Turnaround</label>
+                            <input className={inputCls} value={tier.turnaround} placeholder="7–10 days" onChange={e => setDraft(p => ({ ...p, commissions: p.commissions.map(x => x.id === tier.id ? { ...x, turnaround: e.target.value } : x) }))} />
+                          </div>
+                        </div>
+                        <div>
+                          <label className={labelCls}>Description</label>
+                          <textarea className={inputCls} rows={2} value={tier.description} onChange={e => setDraft(p => ({ ...p, commissions: p.commissions.map(x => x.id === tier.id ? { ...x, description: e.target.value } : x) }))} />
+                        </div>
+                        <div>
+                          <label className={labelCls}>Includes (one per line)</label>
+                          <textarea
+                            className={inputCls}
+                            rows={3}
+                            value={tier.includes.join('\n')}
+                            onChange={e => setDraft(p => ({ ...p, commissions: p.commissions.map(x => x.id === tier.id ? { ...x, includes: e.target.value.split('\n').filter(Boolean) } : x) }))}
+                          />
+                        </div>
+                        <label className="flex items-center gap-2 cursor-pointer">
+                          <input
+                            type="checkbox"
+                            checked={tier.available}
+                            onChange={e => setDraft(p => ({ ...p, commissions: p.commissions.map(x => x.id === tier.id ? { ...x, available: e.target.checked } : x) }))}
+                            className="w-4 h-4 accent-purple-500"
+                          />
+                          <span className="text-sm text-gray-300">Open for commissions</span>
+                        </label>
                       </div>
                     </CollapsibleCard>
                   ))}

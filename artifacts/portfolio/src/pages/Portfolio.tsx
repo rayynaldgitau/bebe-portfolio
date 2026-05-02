@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'motion/react';
-import { Mail, Github, Linkedin, Play } from 'lucide-react';
+import { Mail, Github, Linkedin, Play, Settings } from 'lucide-react';
 import { ArtisticBurst } from '../components/ArtisticBurst';
 import { ImageWithFallback } from '../components/ImageWithFallback';
 import { VideoReel } from '../components/VideoReel';
@@ -23,6 +23,20 @@ export default function Portfolio() {
 
   return (
     <div className="min-h-screen bg-black text-white overflow-x-hidden">
+      {/* Admin Button */}
+      <motion.a
+        href="/admin"
+        className="fixed bottom-6 right-6 z-40 flex items-center gap-2 px-4 py-3 bg-gradient-to-r from-purple-600 to-orange-600 rounded-full shadow-lg hover:shadow-purple-500/50 text-white text-sm font-medium transition-all duration-300"
+        whileHover={{ scale: 1.08 }}
+        whileTap={{ scale: 0.95 }}
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.5 }}
+      >
+        <Settings className="w-4 h-4" />
+        Admin
+      </motion.a>
+
       {/* Navigation */}
       <nav className="fixed top-0 left-0 right-0 z-30 bg-black/80 backdrop-blur-md border-b border-purple-500/20">
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">

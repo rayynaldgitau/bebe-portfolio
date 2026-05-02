@@ -752,12 +752,44 @@ function ProjectForm({ project, onChange }: { project: Project; onChange: (p: Pr
         <textarea rows={2} className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white text-sm focus:outline-none focus:border-purple-500 resize-none" value={project.description} onChange={e => onChange({ ...project, description: e.target.value })} />
       </div>
       <div>
-        <label className="block text-xs text-gray-400 mb-1">Cover Image URL</label>
-        <input className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white text-sm focus:outline-none focus:border-purple-500" value={project.imageUrl} onChange={e => onChange({ ...project, imageUrl: e.target.value })} />
+        <label className="block text-xs text-gray-400 mb-1">Cover Image</label>
+        {project.imageUrl && (
+          <div className="relative mb-2 rounded-lg overflow-hidden group" style={{ height: 140 }}>
+            <img src={project.imageUrl} alt="" className="w-full h-full object-cover" onError={e => (e.currentTarget.style.display = 'none')} />
+            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center gap-2">
+              <label className="cursor-pointer px-3 py-1.5 rounded-lg text-xs font-medium text-white bg-white/20 hover:bg-white/30 transition">
+                Replace
+                <input type="file" accept="image/*" className="hidden" onChange={e => {
+                  const file = e.target.files?.[0];
+                  if (!file) return;
+                  const reader = new FileReader();
+                  reader.onload = ev => onChange({ ...project, imageUrl: ev.target?.result as string });
+                  reader.readAsDataURL(file);
+                }} />
+              </label>
+            </div>
+          </div>
+        )}
+        {!project.imageUrl && (
+          <label className="cursor-pointer flex flex-col items-center justify-center gap-2 w-full h-24 rounded-lg border-2 border-dashed border-gray-600 hover:border-purple-500 transition text-gray-500 hover:text-purple-400">
+            <Image className="w-6 h-6" />
+            <span className="text-xs">Upload cover image</span>
+            <input type="file" accept="image/*" className="hidden" onChange={e => {
+              const file = e.target.files?.[0];
+              if (!file) return;
+              const reader = new FileReader();
+              reader.onload = ev => onChange({ ...project, imageUrl: ev.target?.result as string });
+              reader.readAsDataURL(file);
+            }} />
+          </label>
+        )}
+        <input
+          className="w-full mt-1 px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white text-xs focus:outline-none focus:border-purple-500 text-gray-400"
+          placeholder="…or paste an image URL"
+          value={project.imageUrl.startsWith('data:') ? '' : project.imageUrl}
+          onChange={e => onChange({ ...project, imageUrl: e.target.value })}
+        />
       </div>
-      {project.imageUrl && (
-        <img src={project.imageUrl} alt="" className="w-full h-32 object-cover rounded-lg opacity-70" onError={e => (e.currentTarget.style.display = 'none')} />
-      )}
 
       {/* Section image editors */}
       <div>

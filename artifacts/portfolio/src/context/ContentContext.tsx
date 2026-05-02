@@ -273,7 +273,19 @@ export function ContentProvider({ children }: { children: ReactNode }) {
   const [content, setContent] = useState<PortfolioContent>(() => {
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
-      if (saved) return { ...DEFAULT_CONTENT, ...JSON.parse(saved) };
+      if (saved) {
+        const p = JSON.parse(saved);
+        return {
+          ...DEFAULT_CONTENT,
+          ...p,
+          nav:      { ...DEFAULT_CONTENT.nav,      ...(p.nav      ?? {}) },
+          hero:     { ...DEFAULT_CONTENT.hero,     ...(p.hero     ?? {}) },
+          showreel: { ...DEFAULT_CONTENT.showreel, ...(p.showreel ?? {}) },
+          about:    { ...DEFAULT_CONTENT.about,    ...(p.about    ?? {}) },
+          contact:  { ...DEFAULT_CONTENT.contact,  ...(p.contact  ?? {}) },
+          footer:   { ...DEFAULT_CONTENT.footer,   ...(p.footer   ?? {}) },
+        };
+      }
     } catch {}
     return DEFAULT_CONTENT;
   });

@@ -511,6 +511,35 @@ export default function Portfolio() {
             viewport={{ once: true }}
             transition={{ duration: 0.7 }}
           >
+            {/* Profile picture */}
+            {(content.about as any).profileImage && (
+              <div className="mb-8 flex items-center gap-5">
+                <div
+                  className="shrink-0"
+                  style={{
+                    width: 88, height: 88, borderRadius: '50%',
+                    border: `3px solid ${MAROON}`,
+                    boxShadow: `0 0 0 5px rgba(107,29,42,0.12)`,
+                    overflow: 'hidden',
+                  }}
+                >
+                  <img
+                    src={(content.about as any).profileImage}
+                    alt="Profile"
+                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                  />
+                </div>
+                <div>
+                  <p className="font-semibold text-lg" style={{ fontFamily: SERIF, color: BROWN, fontStyle: 'italic' }}>
+                    Bahleyh
+                  </p>
+                  <p className="text-xs tracking-widest uppercase" style={{ color: MAROON, fontFamily: SANS, letterSpacing: '0.18em' }}>
+                    Digital Artist
+                  </p>
+                </div>
+              </div>
+            )}
+
             <h2 className="text-5xl mb-8" style={{ fontFamily: SERIF, color: BROWN, fontStyle: 'italic' }}>
               About Me
             </h2>

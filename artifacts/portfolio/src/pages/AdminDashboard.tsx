@@ -228,7 +228,61 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
 
                   <div className="bg-gray-900 rounded-xl p-5 border border-gray-800">
                     <h2 className={sectionTitle}>About Me</h2>
-                    <textarea className={inputCls} rows={6} value={draft.about.text} onChange={e => update('about.text', e.target.value)} />
+                    <div className="space-y-4">
+                      {/* Profile picture upload */}
+                      <div>
+                        <label className={labelCls}>Profile Picture</label>
+                        <div className="flex items-center gap-5 mt-1">
+                          {(draft.about as any).profileImage ? (
+                            <div style={{ width: 72, height: 72, borderRadius: '50%', overflow: 'hidden', border: '2px solid #6B1D2A', flexShrink: 0 }}>
+                              <img src={(draft.about as any).profileImage} alt="Profile" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                            </div>
+                          ) : (
+                            <div style={{ width: 72, height: 72, borderRadius: '50%', border: '2px dashed #4B5563', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, backgroundColor: '#1F2937' }}>
+                              <span style={{ fontSize: 24 }}>👤</span>
+                            </div>
+                          )}
+                          <div className="flex flex-col gap-2">
+                            <label className="cursor-pointer inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-white transition" style={{ backgroundColor: '#374151' }}
+                              onMouseEnter={e => (e.currentTarget.style.backgroundColor = '#4B5563')}
+                              onMouseLeave={e => (e.currentTarget.style.backgroundColor = '#374151')}
+                            >
+                              Upload Photo
+                              <input
+                                type="file"
+                                accept="image/*"
+                                className="hidden"
+                                onChange={e => {
+                                  const file = e.target.files?.[0];
+                                  if (!file) return;
+                                  const reader = new FileReader();
+                                  reader.onload = ev => {
+                                    const b64 = ev.target?.result as string;
+                                    setDraft(p => ({ ...p, about: { ...p.about, profileImage: b64 } as any }));
+                                  };
+                                  reader.readAsDataURL(file);
+                                }}
+                              />
+                            </label>
+                            {(draft.about as any).profileImage && (
+                              <button
+                                className="text-xs text-red-400 hover:text-red-300 text-left transition"
+                                onClick={() => setDraft(p => ({ ...p, about: { ...p.about, profileImage: '' } as any }))}
+                              >
+                                Remove photo
+                              </button>
+                            )}
+                          </div>
+                        </div>
+                        <p className="text-xs text-gray-500 mt-2">Shown as a circular avatar beside your name in the About section.</p>
+                      </div>
+
+                      {/* Bio text */}
+                      <div>
+                        <label className={labelCls}>Bio</label>
+                        <textarea className={inputCls} rows={6} value={draft.about.text} onChange={e => update('about.text', e.target.value)} />
+                      </div>
+                    </div>
                   </div>
 
                   <div className="bg-gray-900 rounded-xl p-5 border border-gray-800">

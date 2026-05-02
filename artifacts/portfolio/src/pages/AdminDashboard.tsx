@@ -208,6 +208,25 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
                   </div>
 
                   <div className="bg-gray-900 rounded-xl p-5 border border-gray-800">
+                    <h2 className={sectionTitle}>Showreel</h2>
+                    <div className="space-y-3">
+                      <div>
+                        <label className={labelCls}>Title</label>
+                        <input className={inputCls} value={(draft.showreel as any)?.title ?? ''} onChange={e => update('showreel.title', e.target.value)} placeholder="Animation Showreel" />
+                      </div>
+                      <div>
+                        <label className={labelCls}>Description</label>
+                        <textarea className={inputCls} rows={2} value={(draft.showreel as any)?.description ?? ''} onChange={e => update('showreel.description', e.target.value)} />
+                      </div>
+                      <div>
+                        <label className={labelCls}>YouTube or Vimeo URL</label>
+                        <input className={inputCls} value={(draft.showreel as any)?.videoUrl ?? ''} onChange={e => update('showreel.videoUrl', e.target.value)} placeholder="https://youtube.com/watch?v=..." />
+                        <p className="text-xs text-gray-500 mt-1">Paste any YouTube or Vimeo link. Leave blank to hide the section.</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="bg-gray-900 rounded-xl p-5 border border-gray-800">
                     <h2 className={sectionTitle}>About Me</h2>
                     <textarea className={inputCls} rows={6} value={draft.about.text} onChange={e => update('about.text', e.target.value)} />
                   </div>

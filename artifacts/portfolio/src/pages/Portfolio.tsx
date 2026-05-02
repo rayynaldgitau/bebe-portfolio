@@ -228,6 +228,7 @@ export default function Portfolio() {
     : content.projects.filter(p => p.category === activeCategory);
 
   const navLinks = [
+    { href: '#showreel', label: 'Showreel' },
     { href: '#works', label: 'Works' },
     { href: '#commissions', label: 'Commissions' },
     { href: '#about', label: 'About' },
@@ -371,6 +372,96 @@ export default function Portfolio() {
           <span className="text-xs tracking-widest opacity-40" style={{ fontFamily: SANS, letterSpacing: '0.2em' }}>SCROLL</span>
         </motion.div>
       </section>
+
+      {/* ── SHOWREEL ── */}
+      {(() => {
+        const sr = (content as any).showreel;
+        if (!sr?.videoUrl) return null;
+
+        const getEmbedUrl = (url: string): string | null => {
+          const ytMatch = url.match(/(?:youtube\.com\/(?:[^/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?/\s]{11})/);
+          if (ytMatch) return `https://www.youtube.com/embed/${ytMatch[1]}?rel=0&modestbranding=1&autoplay=0`;
+          const vimeoMatch = url.match(/vimeo\.com\/(\d+)/);
+          if (vimeoMatch) return `https://player.vimeo.com/video/${vimeoMatch[1]}`;
+          return null;
+        };
+
+        const embedUrl = getEmbedUrl(sr.videoUrl);
+
+        return (
+          <section id="showreel" style={{ backgroundColor: MAROON, color: CREAM }}>
+            <div className="max-w-5xl mx-auto px-6 py-20 md:py-28 flex flex-col items-center text-center">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                className="mb-10 w-full"
+              >
+                <span
+                  className="text-xs tracking-widest uppercase mb-4 block opacity-60"
+                  style={{ fontFamily: SANS, letterSpacing: '0.3em' }}
+                >
+                  Featured Work
+                </span>
+                <h2
+                  className="text-4xl md:text-5xl mb-4"
+                  style={{ fontFamily: SERIF, fontStyle: 'italic' }}
+                >
+                  {sr.title || 'Animation Showreel'}
+                </h2>
+                {sr.description && (
+                  <p className="text-sm md:text-base opacity-70 max-w-xl mx-auto" style={{ fontFamily: SANS }}>
+                    {sr.description}
+                  </p>
+                )}
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, scale: 0.97 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6 }}
+                className="w-full rounded-2xl overflow-hidden shadow-2xl"
+                style={{ border: `1px solid rgba(255,255,255,0.12)` }}
+              >
+                {embedUrl ? (
+                  <div style={{ position: 'relative', paddingBottom: '56.25%', height: 0 }}>
+                    <iframe
+                      src={embedUrl}
+                      title={sr.title || 'Showreel'}
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                      style={{
+                        position: 'absolute', top: 0, left: 0,
+                        width: '100%', height: '100%', border: 'none',
+                      }}
+                    />
+                  </div>
+                ) : (
+                  <div
+                    className="flex flex-col items-center justify-center gap-3 py-24 px-8"
+                    style={{ backgroundColor: 'rgba(255,255,255,0.05)' }}
+                  >
+                    <ExternalLink className="w-8 h-8 opacity-40" />
+                    <a
+                      href={sr.videoUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-sm underline opacity-60 hover:opacity-100 transition-opacity"
+                      style={{ fontFamily: SANS }}
+                    >
+                      {sr.videoUrl}
+                    </a>
+                    <p className="text-xs opacity-40" style={{ fontFamily: SANS }}>
+                      Unsupported embed — opens in a new tab
+                    </p>
+                  </div>
+                )}
+              </motion.div>
+            </div>
+          </section>
+        );
+      })()}
 
       {/* ── ABOUT ── */}
       <section id="about" className="flex flex-col md:flex-row min-h-[60vh]">

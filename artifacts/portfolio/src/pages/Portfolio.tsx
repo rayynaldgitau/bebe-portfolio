@@ -768,12 +768,6 @@ export default function Portfolio() {
                   {para}
                 </p>
               ))}
-              <div className="mt-8 flex items-center gap-2">
-                <div className="w-8 h-px" style={{ backgroundColor: MAROON }} />
-                <span className="text-xs tracking-widest uppercase" style={{ color: MAROON, fontFamily: SANS, letterSpacing: '0.2em' }}>
-                  Pre-University · UNIMAS Foundation
-                </span>
-              </div>
             </motion.div>
 
           </div>

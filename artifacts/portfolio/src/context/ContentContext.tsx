@@ -314,6 +314,7 @@ export function ContentProvider({ children }: { children: ReactNode }) {
         if (
           about.text.includes('pre-university') ||
           about.text.includes('UNIMAS') ||
+          about.text.includes('Foundation Programme') ||
           about.text.includes('United States International University Africa')
         ) {
           about.text = DEFAULT_CONTENT.about.text;

@@ -580,17 +580,6 @@ export default function Portfolio() {
               />
             </div>
           </motion.div>
-          <motion.a
-            href={content.contact.tiktok}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-2 px-6 py-2.5 rounded-full text-sm border transition-all"
-            style={{ color: CREAM, borderColor: 'rgba(245,240,232,0.5)', fontFamily: SANS, letterSpacing: '0.05em' }}
-            whileHover={{ backgroundColor: 'rgba(245,240,232,0.15)' }}
-          >
-            <ExternalLink className="w-4 h-4" />
-            Introduction Video
-          </motion.a>
         </div>
       </section>
 

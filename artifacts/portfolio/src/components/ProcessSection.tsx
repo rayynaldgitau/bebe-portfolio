@@ -1,48 +1,19 @@
 import { motion } from 'motion/react';
-import { Lightbulb, Pencil, Rocket, CheckCircle } from 'lucide-react';
+import { Lightbulb, Pencil, Rocket, CheckCircle, Star } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
+import type { ProcessStep } from '../context/ContentContext';
 
-interface ProcessStep {
-  id: string;
-  title: string;
-  description: string;
-  icon: LucideIcon;
-}
+const ICON_MAP: Record<string, LucideIcon> = {
+  Lightbulb, Pencil, Rocket, CheckCircle, Star,
+};
 
-export function ProcessSection() {
-  const steps: ProcessStep[] = [
-    {
-      id: '1',
-      title: 'Discovery',
-      description: 'Understanding your vision, goals, and target audience to create a solid foundation.',
-      icon: Lightbulb
-    },
-    {
-      id: '2',
-      title: 'Concept',
-      description: 'Developing creative concepts, storyboards, and style frames that align with your brand.',
-      icon: Pencil
-    },
-    {
-      id: '3',
-      title: 'Production',
-      description: 'Bringing concepts to life through animation, sound design, and meticulous attention to detail.',
-      icon: Rocket
-    },
-    {
-      id: '4',
-      title: 'Delivery',
-      description: 'Final touches, revisions, and delivering polished animations ready for the world.',
-      icon: CheckCircle
-    }
-  ];
-
+export function ProcessSection({ steps }: { steps: ProcessStep[] }) {
   return (
     <div className="relative">
       <div className="hidden md:block absolute top-20 left-0 right-0 h-1 bg-gradient-to-r from-purple-600 via-orange-500 to-purple-600 opacity-30" />
       <div className="grid grid-cols-1 md:grid-cols-4 gap-8 relative">
         {steps.map((step, index) => {
-          const Icon = step.icon;
+          const Icon = ICON_MAP[step.icon] ?? Lightbulb;
           return (
             <motion.div
               key={step.id}
@@ -66,9 +37,7 @@ export function ProcessSection() {
                 <h3 className="text-xl font-bold mb-3 bg-gradient-to-r from-purple-400 to-orange-400 bg-clip-text text-transparent">
                   {step.title}
                 </h3>
-                <p className="text-gray-400 text-sm leading-relaxed">
-                  {step.description}
-                </p>
+                <p className="text-gray-400 text-sm leading-relaxed">{step.description}</p>
               </div>
             </motion.div>
           );

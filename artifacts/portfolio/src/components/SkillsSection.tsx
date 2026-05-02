@@ -1,36 +1,18 @@
 import { motion } from 'motion/react';
+import type { Skill } from '../context/ContentContext';
 
-interface Skill {
-  name: string;
-  level: number;
-  category: string;
-}
-
-export function SkillsSection() {
-  const skills: Skill[] = [
-    { name: 'After Effects', level: 95, category: 'Software' },
-    { name: 'Cinema 4D', level: 88, category: 'Software' },
-    { name: 'Blender', level: 85, category: 'Software' },
-    { name: 'Illustrator', level: 92, category: 'Software' },
-    { name: 'Premiere Pro', level: 90, category: 'Software' },
-    { name: 'Character Animation', level: 87, category: 'Technique' },
-    { name: 'Motion Graphics', level: 93, category: 'Technique' },
-    { name: '3D Animation', level: 82, category: 'Technique' },
-    { name: 'VFX Compositing', level: 85, category: 'Technique' },
-    { name: 'Storyboarding', level: 88, category: 'Technique' }
-  ];
-
-  const categories = ['Software', 'Technique'];
+export function SkillsSection({ skills }: { skills: Skill[] }) {
+  const categories = [...new Set(skills.map(s => s.category))];
 
   return (
     <div className="space-y-12">
-      {categories.map((category) => (
+      {categories.map(category => (
         <div key={category}>
           <h3 className="text-2xl font-bold mb-6 text-purple-400">{category}</h3>
           <div className="space-y-4">
             {skills.filter(s => s.category === category).map((skill, index) => (
               <motion.div
-                key={skill.name}
+                key={skill.id}
                 initial={{ opacity: 0, x: -30 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}

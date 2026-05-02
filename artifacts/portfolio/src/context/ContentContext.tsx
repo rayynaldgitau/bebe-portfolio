@@ -13,6 +13,7 @@ export interface ProjectSections {
   characterPoses: ProjectSection;
   layoutDesign: ProjectSection;
   storyboards: ProjectSection;
+  illustrations: ProjectSection;
 }
 
 export interface Project {

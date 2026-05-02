@@ -20,6 +20,7 @@ const SECTIONS = [
   { key: 'characterPoses',  label: 'Character Poses' },
   { key: 'layoutDesign',    label: 'Layout Design' },
   { key: 'storyboards',     label: 'Storyboards' },
+  { key: 'illustrations',   label: 'Illustrations' },
 ];
 
 function Lightbox({ src, onClose }: { src: string; onClose: () => void }) {

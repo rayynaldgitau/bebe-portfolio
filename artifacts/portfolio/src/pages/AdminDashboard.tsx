@@ -649,6 +649,7 @@ const PROJECT_SECTIONS = [
   { key: 'characterPoses',  label: 'Character Poses' },
   { key: 'layoutDesign',    label: 'Layout Design' },
   { key: 'storyboards',     label: 'Storyboards' },
+  { key: 'illustrations',   label: 'Illustrations' },
 ];
 
 function ProjectSectionEditor({ secKey, label, data, onUpdate }: {

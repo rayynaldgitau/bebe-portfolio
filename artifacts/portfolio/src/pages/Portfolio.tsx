@@ -559,15 +559,17 @@ export default function Portfolio() {
           >
             {content.hero.subtitle}
           </p>
-          <a
-            href={content.contact.tiktok}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-sm tracking-widest opacity-70 hover:opacity-100 transition-opacity"
-            style={{ color: BROWN, fontFamily: SANS }}
-          >
-            ✦ @meispupo
-          </a>
+          {content.contact.tiktok && content.contact.tiktok !== '#' && (
+            <a
+              href={content.contact.tiktok}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sm tracking-widest opacity-70 hover:opacity-100 transition-opacity"
+              style={{ color: BROWN, fontFamily: SANS }}
+            >
+              ✦ {(content.contact as any).tiktokHandle || content.contact.tiktok}
+            </a>
+          )}
         </motion.div>
 
         <motion.div
@@ -789,17 +791,19 @@ export default function Portfolio() {
           <h2 className="text-5xl md:text-6xl mb-2" style={{ fontFamily: SERIF, color: CREAM, fontStyle: 'italic' }}>
             My Works
           </h2>
-          <div className="flex justify-center mt-2">
-            <a
-              href={content.contact.tiktok}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-xs tracking-widest opacity-50 hover:opacity-80 transition-opacity"
-              style={{ color: CREAM, fontFamily: SANS, letterSpacing: '0.2em' }}
-            >
-              ✦ @meispupo
-            </a>
-          </div>
+          {content.contact.tiktok && content.contact.tiktok !== '#' && (
+            <div className="flex justify-center mt-2">
+              <a
+                href={content.contact.tiktok}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-xs tracking-widest opacity-50 hover:opacity-80 transition-opacity"
+                style={{ color: CREAM, fontFamily: SANS, letterSpacing: '0.2em' }}
+              >
+                ✦ {(content.contact as any).tiktokHandle || content.contact.tiktok}
+              </a>
+            </div>
+          )}
         </motion.div>
 
         {/* Category filter */}
@@ -1161,15 +1165,28 @@ export default function Portfolio() {
               <Mail className="w-4 h-4" />
               Email Me
             </a>
-            <a
-              href={content.contact.tiktok}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-2 px-6 py-3 rounded-full text-sm border transition-all"
-              style={{ color: BROWN, borderColor: BROWN, fontFamily: SANS }}
-            >
-              TikTok @meispupo
-            </a>
+            {content.contact.tiktok && content.contact.tiktok !== '#' && (
+              <a
+                href={content.contact.tiktok}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 px-6 py-3 rounded-full text-sm border transition-all"
+                style={{ color: BROWN, borderColor: BROWN, fontFamily: SANS }}
+              >
+                TikTok {(content.contact as any).tiktokHandle || ''}
+              </a>
+            )}
+            {content.contact.instagram && content.contact.instagram !== '#' && (
+              <a
+                href={content.contact.instagram}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 px-6 py-3 rounded-full text-sm border transition-all"
+                style={{ color: BROWN, borderColor: BROWN, fontFamily: SANS }}
+              >
+                Instagram {(content.contact as any).instagramHandle || ''}
+              </a>
+            )}
             {content.contact.github && content.contact.github !== '#' && (
               <a
                 href={content.contact.github}
@@ -1197,15 +1214,17 @@ export default function Portfolio() {
         <span className="text-xs tracking-widest opacity-60" style={{ fontFamily: SANS, letterSpacing: '0.15em' }}>
           {content.footer.text}
         </span>
-        <a
-          href={content.contact.tiktok}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-xs tracking-widest opacity-60 hover:opacity-100 transition-opacity"
-          style={{ fontFamily: SANS, color: SAND, letterSpacing: '0.15em' }}
-        >
-          ✦ @meispupo
-        </a>
+        {content.contact.tiktok && content.contact.tiktok !== '#' && (
+          <a
+            href={content.contact.tiktok}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-xs tracking-widest opacity-60 hover:opacity-100 transition-opacity"
+            style={{ fontFamily: SANS, color: SAND, letterSpacing: '0.15em' }}
+          >
+            ✦ {(content.contact as any).tiktokHandle || content.contact.tiktok}
+          </a>
+        )}
       </footer>
 
     </div>

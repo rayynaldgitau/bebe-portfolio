@@ -697,13 +697,25 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
                         <label className={labelCls}>Email Address</label>
                         <input className={inputCls} type="email" value={draft.contact.email} onChange={e => update('contact.email', e.target.value)} placeholder="hello@example.com" />
                       </div>
-                      <div>
-                        <label className={labelCls}>TikTok URL</label>
-                        <input className={inputCls} value={(draft.contact as any).tiktok ?? ''} onChange={e => update('contact.tiktok', e.target.value)} placeholder="https://tiktok.com/@username" />
+                      <div className="grid grid-cols-2 gap-3">
+                        <div>
+                          <label className={labelCls}>TikTok URL</label>
+                          <input className={inputCls} value={(draft.contact as any).tiktok ?? ''} onChange={e => update('contact.tiktok', e.target.value)} placeholder="https://tiktok.com/@username" />
+                        </div>
+                        <div>
+                          <label className={labelCls}>TikTok Display Handle</label>
+                          <input className={inputCls} value={(draft.contact as any).tiktokHandle ?? ''} onChange={e => update('contact.tiktokHandle', e.target.value)} placeholder="@username" />
+                        </div>
                       </div>
-                      <div>
-                        <label className={labelCls}>Instagram URL</label>
-                        <input className={inputCls} value={(draft.contact as any).instagram ?? ''} onChange={e => update('contact.instagram', e.target.value)} placeholder="https://instagram.com/username" />
+                      <div className="grid grid-cols-2 gap-3">
+                        <div>
+                          <label className={labelCls}>Instagram URL</label>
+                          <input className={inputCls} value={(draft.contact as any).instagram ?? ''} onChange={e => update('contact.instagram', e.target.value)} placeholder="https://instagram.com/username" />
+                        </div>
+                        <div>
+                          <label className={labelCls}>Instagram Display Handle</label>
+                          <input className={inputCls} value={(draft.contact as any).instagramHandle ?? ''} onChange={e => update('contact.instagramHandle', e.target.value)} placeholder="@username" />
+                        </div>
                       </div>
                       <div>
                         <label className={labelCls}>GitHub URL</label>

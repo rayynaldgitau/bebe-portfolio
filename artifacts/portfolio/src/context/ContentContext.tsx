@@ -103,7 +103,7 @@ export interface PortfolioContent {
   commissions: CommissionType[];
   illustrations: Illustration[];
   roughAnimations: RoughAnimation[];
-  contact: { email: string; github: string; linkedin: string; tiktok: string; instagram: string };
+  contact: { email: string; github: string; linkedin: string; tiktok: string; tiktokHandle: string; instagram: string; instagramHandle: string };
   footer: { text: string };
 }
 
@@ -120,7 +120,7 @@ const DEFAULT_CONTENT: PortfolioContent = {
     videoUrl: '',
   },
   about: {
-    text: "Hi! My name is Aurora. I am currently a pre-university student in UNIMAS Foundation Programme.\n\nSince I was little, I have been drawing, doing it both as a hobby and as a commission.\n\nMy works span digital illustration, short comics, character design, and animation — all fuelled by a love for storytelling and visual experimentation.",
+    text: "Hi! My name is Aurora. I am currently a student at United States International University Africa.\n\nSince I was little, I have been drawing, doing it both as a hobby and as a commission.\n\nMy works span digital illustration, short comics, character design, and animation — all fuelled by a love for storytelling and visual experimentation.",
     image: aboutPage,
     profileImage: '',
   },
@@ -284,7 +284,9 @@ const DEFAULT_CONTENT: PortfolioContent = {
     github: 'https://github.com/rayynaldgitau',
     linkedin: '#',
     tiktok: 'https://tiktok.com/@meispupo',
+    tiktokHandle: '@meispupo',
     instagram: '#',
+    instagramHandle: '@meispupo',
   },
   illustrations: [],
   roughAnimations: [],

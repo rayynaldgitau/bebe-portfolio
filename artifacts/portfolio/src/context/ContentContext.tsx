@@ -77,6 +77,12 @@ export interface CommissionType {
   available: boolean;
 }
 
+export interface RoughAnimation {
+  id: string;
+  videoUrl: string;
+  title: string;
+}
+
 export interface PortfolioContent {
   nav: { brandName: string };
   hero: { title: string; subtitle: string; coverImage: string };
@@ -89,6 +95,7 @@ export interface PortfolioContent {
   testimonials: Testimonial[];
   processSteps: ProcessStep[];
   commissions: CommissionType[];
+  roughAnimations: RoughAnimation[];
   contact: { email: string; github: string; linkedin: string; tiktok: string; instagram: string };
   footer: { text: string };
 }
@@ -272,6 +279,7 @@ const DEFAULT_CONTENT: PortfolioContent = {
     tiktok: 'https://tiktok.com/@meispupo',
     instagram: '#',
   },
+  roughAnimations: [],
   footer: { text: '© 2026 Bahleyh. All Rights Reserved.' },
 };
 

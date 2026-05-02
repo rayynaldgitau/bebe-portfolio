@@ -12,12 +12,13 @@ interface AdminDashboardProps {
   onLogout: () => void;
 }
 
-type TabId = 'general' | 'projects' | 'services' | 'skills' | 'stats' | 'testimonials' | 'process' | 'commissions' | 'contact' | 'security';
+type TabId = 'general' | 'projects' | 'services' | 'skills' | 'stats' | 'testimonials' | 'process' | 'commissions' | 'roughAnimations' | 'contact' | 'security';
 
 const TABS: { id: TabId; label: string; icon: any }[] = [
   { id: 'general', label: 'General', icon: LayoutDashboard },
   { id: 'projects', label: 'Projects', icon: Image },
   { id: 'commissions', label: 'Commissions', icon: Star },
+  { id: 'roughAnimations', label: 'Rough Animations', icon: Image },
   { id: 'skills', label: 'Skills', icon: BarChart2 },
   { id: 'stats', label: 'Stats', icon: Users },
   { id: 'testimonials', label: 'Testimonials', icon: MessageSquare },
@@ -526,6 +527,68 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
                         </label>
                       </div>
                     </CollapsibleCard>
+                  ))}
+                </div>
+              )}
+
+              {/* ROUGH ANIMATIONS */}
+              {activeTab === 'roughAnimations' && (
+                <div className="space-y-4 max-w-2xl">
+                  <div className="flex justify-between items-center">
+                    <p className="text-gray-400 text-sm">{(draft.roughAnimations ?? []).length} video{(draft.roughAnimations ?? []).length !== 1 ? 's' : ''}</p>
+                    <button
+                      className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-white transition"
+                      style={{ backgroundColor: '#6B1D2A' }}
+                      onClick={() => setDraft(p => ({
+                        ...p,
+                        roughAnimations: [...(p.roughAnimations ?? []), { id: uid(), videoUrl: '', title: 'Untitled Rough' }],
+                      }))}
+                    >
+                      + Add Video
+                    </button>
+                  </div>
+                  <p className="text-xs text-gray-500">Paste YouTube or Vimeo URLs. This section is hidden on the site until at least one video is added.</p>
+                  {(draft.roughAnimations ?? []).length === 0 && (
+                    <div className="bg-gray-900 rounded-xl p-8 border border-gray-800 text-center text-gray-500 text-sm">
+                      No rough animations yet. Click "+ Add Video" to add one.
+                    </div>
+                  )}
+                  {(draft.roughAnimations ?? []).map((ra, i) => (
+                    <div key={ra.id} className="bg-gray-900 rounded-xl p-5 border border-gray-800 space-y-3">
+                      <div className="flex items-center justify-between mb-1">
+                        <span className="text-white text-sm font-medium">Video {i + 1}</span>
+                        <button
+                          className="text-xs text-red-400 hover:text-red-300 transition"
+                          onClick={() => setDraft(p => ({ ...p, roughAnimations: (p.roughAnimations ?? []).filter(r => r.id !== ra.id) }))}
+                        >
+                          Remove
+                        </button>
+                      </div>
+                      <div>
+                        <label className={labelCls}>Title</label>
+                        <input
+                          className={inputCls}
+                          value={ra.title}
+                          placeholder="e.g. Rough Cut — Xiao Animation"
+                          onChange={e => setDraft(p => ({
+                            ...p,
+                            roughAnimations: (p.roughAnimations ?? []).map(r => r.id === ra.id ? { ...r, title: e.target.value } : r),
+                          }))}
+                        />
+                      </div>
+                      <div>
+                        <label className={labelCls}>YouTube or Vimeo URL</label>
+                        <input
+                          className={inputCls}
+                          value={ra.videoUrl}
+                          placeholder="https://youtube.com/watch?v=..."
+                          onChange={e => setDraft(p => ({
+                            ...p,
+                            roughAnimations: (p.roughAnimations ?? []).map(r => r.id === ra.id ? { ...r, videoUrl: e.target.value } : r),
+                          }))}
+                        />
+                      </div>
+                    </div>
                   ))}
                 </div>
               )}

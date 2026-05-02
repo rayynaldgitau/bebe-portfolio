@@ -844,6 +844,91 @@ export default function Portfolio() {
         );
       })()}
 
+      {/* ── ROUGH ANIMATIONS ── */}
+      {(() => {
+        const videos = content.roughAnimations ?? [];
+        if (videos.length === 0) return null;
+
+        function toEmbed(url: string): string | null {
+          if (!url) return null;
+          const ytMatch = url.match(/(?:youtube\.com\/(?:watch\?v=|shorts\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/);
+          if (ytMatch) return `https://www.youtube.com/embed/${ytMatch[1]}?rel=0`;
+          const vimeoMatch = url.match(/vimeo\.com\/(\d+)/);
+          if (vimeoMatch) return `https://player.vimeo.com/video/${vimeoMatch[1]}`;
+          return null;
+        }
+
+        const validVideos = videos.map(v => ({ ...v, embed: toEmbed(v.videoUrl) })).filter(v => v.embed);
+        if (validVideos.length === 0) return null;
+
+        return (
+          <section id="rough-animations" className="py-20 px-6 md:px-12" style={{ backgroundColor: CREAM }}>
+            <div className="max-w-6xl mx-auto">
+              <motion.div
+                className="mb-12"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+              >
+                <h2 className="text-4xl md:text-5xl mb-2" style={{ fontFamily: SERIF, color: BROWN, fontStyle: 'italic' }}>
+                  Rough Animated Videos
+                </h2>
+                <div className="w-12 h-px mt-4 mb-4" style={{ backgroundColor: MAROON }} />
+                <p className="text-sm max-w-xl" style={{ fontFamily: SANS, color: BROWN_LIGHT }}>
+                  Behind-the-scenes rough cuts and work-in-progress animations.
+                </p>
+              </motion.div>
+
+              <div
+                className="grid gap-8"
+                style={{
+                  gridTemplateColumns: validVideos.length === 1
+                    ? '1fr'
+                    : validVideos.length === 2
+                      ? 'repeat(2, 1fr)'
+                      : 'repeat(auto-fill, minmax(320px, 1fr))',
+                }}
+              >
+                {validVideos.map((v, i) => (
+                  <motion.div
+                    key={v.id}
+                    initial={{ opacity: 0, y: 24 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: i * 0.08, duration: 0.5 }}
+                  >
+                    <div
+                      className="overflow-hidden rounded-xl"
+                      style={{ position: 'relative', paddingBottom: '56.25%', backgroundColor: SAND_LIGHT }}
+                    >
+                      <iframe
+                        src={v.embed!}
+                        title={v.title}
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                        style={{
+                          position: 'absolute', inset: 0,
+                          width: '100%', height: '100%',
+                          border: 'none', borderRadius: '12px',
+                        }}
+                      />
+                    </div>
+                    {v.title && (
+                      <p
+                        className="mt-3 text-sm"
+                        style={{ fontFamily: SERIF, color: BROWN, fontStyle: 'italic' }}
+                      >
+                        {v.title}
+                      </p>
+                    )}
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+          </section>
+        );
+      })()}
+
       {/* ── COMMISSIONS ── */}
       <section id="commissions" className="py-20 px-6 md:px-16" style={{ backgroundColor: CREAM }}>
         <div className="max-w-5xl mx-auto">

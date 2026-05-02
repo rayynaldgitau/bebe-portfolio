@@ -105,6 +105,7 @@ const CREAM = '#F5F0E8';
 const BROWN = '#3D2B1F';
 const BROWN_LIGHT = '#6B5040';
 
+type ProjectSection = { images: string[]; notes: string };
 type Project = {
   id: string;
   title: string;
@@ -112,51 +113,167 @@ type Project = {
   imageUrl: string;
   category: string;
   detail?: string;
+  sections?: Partial<Record<string, ProjectSection>>;
 };
 
+const WORK_SECTIONS = [
+  { key: 'research',        label: 'Research & Visual Dev.' },
+  { key: 'thumbnails',      label: 'Thumbnails' },
+  { key: 'characterDesign', label: 'Character Design' },
+  { key: 'characterPoses',  label: 'Character Poses' },
+  { key: 'layoutDesign',    label: 'Layout Design' },
+  { key: 'storyboards',     label: 'Storyboards' },
+];
+
 function WorkModal({ work, onClose }: { work: Project; onClose: () => void }) {
+  const [activeIdx, setActiveIdx] = useState(0);
+  const [lightbox, setLightbox] = useState<string | null>(null);
+
+  const sec = WORK_SECTIONS[activeIdx];
+  const secData: ProjectSection = work.sections?.[sec.key] ?? { images: [], notes: '' };
+
   return (
     <motion.div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4"
+      className="fixed inset-0 z-50 flex items-end md:items-center justify-center"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
     >
-      <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={onClose} />
+      {/* backdrop */}
+      <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={onClose} />
+
+      {/* lightbox */}
+      <AnimatePresence>
+        {lightbox && (
+          <motion.div
+            className="fixed inset-0 z-[60] flex items-center justify-center bg-black/90 p-4"
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+            onClick={() => setLightbox(null)}
+          >
+            <img src={lightbox} alt="" className="max-w-full max-h-full rounded-xl object-contain" />
+            <button
+              className="absolute top-4 right-4 w-10 h-10 rounded-full flex items-center justify-center"
+              style={{ backgroundColor: 'rgba(255,255,255,0.15)', color: '#fff' }}
+              onClick={() => setLightbox(null)}
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* panel */}
       <motion.div
-        className="relative z-10 max-w-3xl w-full max-h-[90vh] overflow-y-auto rounded-2xl"
-        style={{ backgroundColor: CREAM, color: BROWN }}
-        initial={{ scale: 0.92, opacity: 0, y: 20 }}
-        animate={{ scale: 1, opacity: 1, y: 0 }}
-        exit={{ scale: 0.92, opacity: 0, y: 20 }}
-        transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+        className="relative z-10 w-full md:max-w-5xl md:max-h-[92vh] overflow-hidden flex flex-col md:rounded-2xl"
+        style={{ backgroundColor: CREAM, color: BROWN, maxHeight: '94vh' }}
+        initial={{ y: 60, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        exit={{ y: 60, opacity: 0 }}
+        transition={{ type: 'spring', damping: 28, stiffness: 320 }}
       >
+        {/* close */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 z-10 w-9 h-9 rounded-full flex items-center justify-center transition-colors"
-          style={{ backgroundColor: SAND, color: BROWN }}
+          className="absolute top-4 right-4 z-20 w-9 h-9 rounded-full flex items-center justify-center"
+          style={{ backgroundColor: 'rgba(0,0,0,0.45)', color: '#fff' }}
         >
           <X className="w-4 h-4" />
         </button>
-        <img
-          src={work.imageUrl}
-          alt={work.title}
-          className="w-full object-cover rounded-t-2xl"
-          style={{ maxHeight: '420px', objectFit: 'cover', objectPosition: 'top' }}
-        />
-        <div className="p-8">
-          <span
-            className="text-xs font-bold tracking-widest uppercase mb-3 inline-block"
-            style={{ color: MAROON, fontFamily: SANS }}
+
+        {/* hero image + title */}
+        <div className="relative shrink-0" style={{ maxHeight: 260 }}>
+          <img
+            src={work.imageUrl}
+            alt={work.title}
+            className="w-full object-cover"
+            style={{ height: 220, objectFit: 'cover', objectPosition: 'top' }}
+          />
+          <div
+            className="absolute inset-0 flex flex-col justify-end px-7 pb-5"
+            style={{ background: 'linear-gradient(to top, rgba(61,43,31,0.88) 0%, transparent 55%)' }}
           >
-            {work.category}
-          </span>
-          <h2 className="text-2xl mb-4 leading-tight" style={{ fontFamily: SERIF, color: BROWN }}>
-            {work.title}
-          </h2>
-          <p className="leading-relaxed whitespace-pre-line" style={{ fontFamily: SANS, color: BROWN_LIGHT, fontSize: '0.95rem' }}>
-            {work.detail || work.description}
-          </p>
+            <span className="text-xs font-bold tracking-widest uppercase mb-1" style={{ color: SAND, fontFamily: SANS }}>
+              {work.category}
+            </span>
+            <h2 className="text-2xl leading-tight" style={{ fontFamily: SERIF, color: CREAM }}>
+              {work.title}
+            </h2>
+          </div>
+        </div>
+
+        {/* description */}
+        {(work.detail || work.description) && (
+          <div className="px-7 py-4 shrink-0 border-b" style={{ borderColor: SAND_DARK + '44' }}>
+            <p className="text-sm leading-relaxed" style={{ color: BROWN_LIGHT }}>{work.detail || work.description}</p>
+          </div>
+        )}
+
+        {/* section tabs */}
+        <div
+          className="flex shrink-0 overflow-x-auto border-b"
+          style={{ borderColor: SAND_DARK + '44', scrollbarWidth: 'none' }}
+        >
+          {WORK_SECTIONS.map((s, i) => {
+            const hasContent = (work.sections?.[s.key]?.images?.length ?? 0) > 0;
+            const active = i === activeIdx;
+            return (
+              <button
+                key={s.key}
+                onClick={() => setActiveIdx(i)}
+                className="shrink-0 px-5 py-3 text-xs font-medium tracking-wide transition-all relative whitespace-nowrap flex items-center gap-1.5"
+                style={{
+                  fontFamily: SANS,
+                  color: active ? MAROON : BROWN_LIGHT,
+                  borderBottom: active ? `2px solid ${MAROON}` : '2px solid transparent',
+                  marginBottom: -1,
+                  backgroundColor: active ? 'rgba(107,29,42,0.06)' : 'transparent',
+                }}
+              >
+                {s.label}
+                {hasContent && (
+                  <span
+                    className="w-1.5 h-1.5 rounded-full"
+                    style={{ backgroundColor: MAROON, opacity: active ? 1 : 0.5 }}
+                  />
+                )}
+              </button>
+            );
+          })}
+        </div>
+
+        {/* section content — scrollable */}
+        <div className="flex-1 overflow-y-auto px-7 py-6">
+          {secData.notes && (
+            <p className="text-sm leading-relaxed mb-5 italic" style={{ color: BROWN_LIGHT, fontFamily: SANS }}>
+              {secData.notes}
+            </p>
+          )}
+
+          {secData.images.length > 0 ? (
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+              {secData.images.map((img, i) => (
+                <motion.div
+                  key={i}
+                  className="rounded-lg overflow-hidden cursor-zoom-in"
+                  style={{ aspectRatio: '4/3', backgroundColor: SAND }}
+                  whileHover={{ scale: 1.02 }}
+                  onClick={() => setLightbox(img)}
+                >
+                  <img src={img} alt="" className="w-full h-full object-cover" />
+                </motion.div>
+              ))}
+            </div>
+          ) : (
+            <div className="flex flex-col items-center justify-center py-16 gap-3" style={{ opacity: 0.35 }}>
+              <div style={{ fontSize: 36 }}>🎨</div>
+              <p className="text-sm text-center" style={{ fontFamily: SANS }}>
+                No content added yet for this section.
+              </p>
+              <p className="text-xs text-center" style={{ fontFamily: SANS }}>
+                Upload images in the admin panel → Projects → {sec.label}
+              </p>
+            </div>
+          )}
         </div>
       </motion.div>
     </motion.div>

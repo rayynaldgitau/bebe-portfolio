@@ -1,6 +1,20 @@
 import { createContext, useContext, useState, ReactNode } from 'react';
 import { cover, aboutPage, w1, w2, w3, w4, w5, w6, w7, w8, w9 } from '../lib/artworkImages';
 
+export interface ProjectSection {
+  images: string[];
+  notes: string;
+}
+
+export interface ProjectSections {
+  research: ProjectSection;
+  thumbnails: ProjectSection;
+  characterDesign: ProjectSection;
+  characterPoses: ProjectSection;
+  layoutDesign: ProjectSection;
+  storyboards: ProjectSection;
+}
+
 export interface Project {
   id: string;
   title: string;
@@ -8,6 +22,7 @@ export interface Project {
   imageUrl: string;
   category: string;
   detail?: string;
+  sections?: Partial<ProjectSections>;
 }
 
 export interface Service {

@@ -642,7 +642,99 @@ function CollapsibleCard({ id, title, subtitle, expanded, onToggle, onDelete, ch
   );
 }
 
+const PROJECT_SECTIONS = [
+  { key: 'research',        label: 'Research & Visual Development' },
+  { key: 'thumbnails',      label: 'Thumbnails' },
+  { key: 'characterDesign', label: 'Character Design & Turnaround' },
+  { key: 'characterPoses',  label: 'Character Poses' },
+  { key: 'layoutDesign',    label: 'Layout Design' },
+  { key: 'storyboards',     label: 'Storyboards' },
+];
+
+function ProjectSectionEditor({ secKey, label, data, onUpdate }: {
+  secKey: string; label: string;
+  data: { images: string[]; notes: string };
+  onUpdate: (v: { images: string[]; notes: string }) => void;
+}) {
+  const [open, setOpen] = useState(false);
+
+  const addImages = (files: FileList) => {
+    Array.from(files).forEach(file => {
+      const reader = new FileReader();
+      reader.onload = ev => {
+        const b64 = ev.target?.result as string;
+        onUpdate({ ...data, images: [...data.images, b64] });
+      };
+      reader.readAsDataURL(file);
+    });
+  };
+
+  const removeImg = (i: number) => onUpdate({ ...data, images: data.images.filter((_, idx) => idx !== i) });
+
+  return (
+    <div className="border border-gray-700 rounded-lg overflow-hidden">
+      <button
+        className="w-full flex items-center justify-between px-4 py-3 text-sm text-left hover:bg-gray-800 transition"
+        onClick={() => setOpen(o => !o)}
+      >
+        <span className="flex items-center gap-2 text-gray-300">
+          {label}
+          {data.images.length > 0 && (
+            <span className="text-xs px-1.5 py-0.5 rounded-full bg-purple-500/20 text-purple-300">{data.images.length}</span>
+          )}
+        </span>
+        {open ? <ChevronUp className="w-4 h-4 text-gray-500" /> : <ChevronDown className="w-4 h-4 text-gray-500" />}
+      </button>
+      {open && (
+        <div className="px-4 pb-4 space-y-3 border-t border-gray-700 pt-3">
+          <div>
+            <label className="block text-xs text-gray-400 mb-1">Notes (optional)</label>
+            <textarea
+              rows={2}
+              className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white text-xs focus:outline-none focus:border-purple-500 resize-none"
+              value={data.notes}
+              placeholder="Describe this section..."
+              onChange={e => onUpdate({ ...data, notes: e.target.value })}
+            />
+          </div>
+          {/* image thumbnails */}
+          {data.images.length > 0 && (
+            <div className="grid grid-cols-3 gap-2">
+              {data.images.map((img, i) => (
+                <div key={i} className="relative group aspect-[4/3] rounded-lg overflow-hidden bg-gray-800">
+                  <img src={img} alt="" className="w-full h-full object-cover" />
+                  <button
+                    onClick={() => removeImg(i)}
+                    className="absolute top-1 right-1 w-6 h-6 rounded-full bg-red-600/80 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition"
+                  >
+                    <X className="w-3 h-3" />
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+          {/* upload */}
+          <label className="cursor-pointer inline-flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-medium text-white bg-gray-700 hover:bg-gray-600 transition">
+            + Add Images
+            <input
+              type="file"
+              accept="image/*"
+              multiple
+              className="hidden"
+              onChange={e => e.target.files && addImages(e.target.files)}
+            />
+          </label>
+        </div>
+      )}
+    </div>
+  );
+}
+
 function ProjectForm({ project, onChange }: { project: Project; onChange: (p: Project) => void }) {
+  const getSec = (key: string) => (project as any).sections?.[key] ?? { images: [], notes: '' };
+  const updateSec = (key: string, val: { images: string[]; notes: string }) =>
+    onChange({ ...project, sections: { ...(project as any).sections, [key]: val } } as any);
+
   return (
     <div className="space-y-3 pt-2">
       <div className="grid grid-cols-2 gap-3">
@@ -660,12 +752,28 @@ function ProjectForm({ project, onChange }: { project: Project; onChange: (p: Pr
         <textarea rows={2} className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white text-sm focus:outline-none focus:border-purple-500 resize-none" value={project.description} onChange={e => onChange({ ...project, description: e.target.value })} />
       </div>
       <div>
-        <label className="block text-xs text-gray-400 mb-1">Image URL</label>
+        <label className="block text-xs text-gray-400 mb-1">Cover Image URL</label>
         <input className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white text-sm focus:outline-none focus:border-purple-500" value={project.imageUrl} onChange={e => onChange({ ...project, imageUrl: e.target.value })} />
       </div>
       {project.imageUrl && (
         <img src={project.imageUrl} alt="" className="w-full h-32 object-cover rounded-lg opacity-70" onError={e => (e.currentTarget.style.display = 'none')} />
       )}
+
+      {/* Section image editors */}
+      <div>
+        <p className="text-xs text-gray-400 mb-2 font-medium uppercase tracking-wider">Project Sections</p>
+        <div className="space-y-2">
+          {PROJECT_SECTIONS.map(s => (
+            <ProjectSectionEditor
+              key={s.key}
+              secKey={s.key}
+              label={s.label}
+              data={getSec(s.key)}
+              onUpdate={val => updateSec(s.key, val)}
+            />
+          ))}
+        </div>
+      </div>
     </div>
   );
 }

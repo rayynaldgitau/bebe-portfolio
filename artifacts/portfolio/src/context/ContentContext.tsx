@@ -1,4 +1,5 @@
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { createContext, useContext, useState, ReactNode } from 'react';
+import { cover, aboutPage, w1, w2, w3, w4, w5, w6, w7, w8, w9 } from '../lib/artworkImages';
 
 export interface Project {
   id: string;
@@ -6,6 +7,7 @@ export interface Project {
   description: string;
   imageUrl: string;
   category: string;
+  detail?: string;
 }
 
 export interface Service {
@@ -50,78 +52,140 @@ export interface ProcessStep {
 
 export interface PortfolioContent {
   nav: { brandName: string };
-  hero: { title: string; subtitle: string };
-  about: { text: string };
+  hero: { title: string; subtitle: string; coverImage: string };
+  about: { text: string; image: string };
   stats: Stat[];
   projects: Project[];
   services: Service[];
   skills: Skill[];
   testimonials: Testimonial[];
   processSteps: ProcessStep[];
-  contact: { email: string; github: string; linkedin: string };
+  contact: { email: string; github: string; linkedin: string; tiktok: string; instagram: string };
   footer: { text: string };
 }
 
 const DEFAULT_CONTENT: PortfolioContent = {
-  nav: { brandName: 'Portfolio' },
+  nav: { brandName: "Aurora's" },
   hero: {
-    title: 'Creative Animator',
-    subtitle: 'Bringing imagination to life through motion, color, and storytelling',
+    title: "Aurora's",
+    subtitle: 'DIGITAL ART PORTFOLIO',
+    coverImage: cover,
   },
   about: {
-    text: 'I craft visual narratives that transcend the ordinary. With a passion for experimental animation and a deep understanding of motion design, I create experiences that captivate and inspire. My work blends traditional techniques with cutting-edge digital artistry.',
+    text: "Hi! My name is Aurora. I am currently a pre-university student in UNIMAS Foundation Programme.\n\nSince I was little, I have been drawing, doing it both as a hobby and as a commission.\n\nMy works span digital illustration, short comics, character design, and animation — all fuelled by a love for storytelling and visual experimentation.",
+    image: aboutPage,
   },
   stats: [
-    { id: '1', label: 'Projects Completed', value: 250, suffix: '+', prefix: '' },
-    { id: '2', label: 'Years Experience', value: 8, suffix: '+', prefix: '' },
-    { id: '3', label: 'Happy Clients', value: 120, suffix: '+', prefix: '' },
-    { id: '4', label: 'Awards Won', value: 15, suffix: '', prefix: '' },
+    { id: '1', label: 'Works in Portfolio', value: 9, suffix: '', prefix: '' },
+    { id: '2', label: 'Competition Awards', value: 1, suffix: '', prefix: '' },
+    { id: '3', label: 'Years Drawing', value: 7, suffix: '+', prefix: '' },
+    { id: '4', label: 'Commission Projects', value: 20, suffix: '+', prefix: '' },
   ],
   projects: [
-    { id: '1', title: 'Chromatic Dreams', description: 'An exploration of color theory through abstract motion', imageUrl: 'https://images.unsplash.com/photo-1674305281997-b6538532f388?w=1080', category: 'Abstract' },
-    { id: '2', title: 'Fluid Dynamics', description: 'Organic shapes meet digital precision', imageUrl: 'https://images.unsplash.com/photo-1745357404070-b39944400f25?w=1080', category: 'Motion' },
-    { id: '3', title: 'Neon Narrative', description: 'A story told through light and shadow', imageUrl: 'https://images.unsplash.com/photo-1697868372007-7130b2fec25e?w=1080', category: 'Experimental' },
-    { id: '4', title: 'Gradient Infinity', description: 'Seamless transitions in endless loops', imageUrl: 'https://images.unsplash.com/photo-1759852174174-7beac185d35f?w=1080', category: 'Loop' },
-    { id: '5', title: 'Cosmic Octopus', description: 'Surreal characters in vibrant worlds', imageUrl: 'https://images.unsplash.com/photo-1664639985407-c0a62e7c1a54?w=1080', category: 'Character' },
-    { id: '6', title: 'Prismatic Flow', description: 'Where geometry dances with chaos', imageUrl: 'https://images.unsplash.com/photo-1764601842167-ba701eed47f5?w=1080', category: 'Abstract' },
+    {
+      id: '1',
+      title: '"Xiao and Venti\'s Flute" Short Animation',
+      description: 'A short animation featuring characters from Genshin Impact.',
+      imageUrl: w1,
+      category: 'Animation',
+      detail: 'A short animation I made featuring Xiao and Venti from Genshin Impact. You can see this on my first TikTok video I posted.',
+    },
+    {
+      id: '2',
+      title: '"The Bystander" Short Comic',
+      description: 'Award-winning short comic about bullying from the witness\'s perspective.',
+      imageUrl: w2,
+      category: 'Comic',
+      detail: '"The Bystander" is a short comic I made in 2020 for IKRAM Teens Johor National Comic Challenge with the theme \'Kami Anti Buli\'. I noticed that most people focus on the bullied and the bully in these type of story but no one ever pay attention to the witnesses. The deer, tiger, and photographer represent the victim, bully, and witnesses respectively. The winner was announced in early January 2021 and I won first place.',
+    },
+    {
+      id: '3',
+      title: '"Trial by Fire" Short Comic',
+      description: 'A short comic exploring themes of doubt and perseverance.',
+      imageUrl: w3,
+      category: 'Comic',
+      detail: 'A short comic I also posted on my TikTok. All pages are included in the full portfolio.',
+    },
+    {
+      id: '4',
+      title: '"Ryujin"',
+      description: 'Digital painting made for a competition with the theme "Japan".',
+      imageUrl: w4,
+      category: 'Digital Art',
+      detail: '"Ryujin" is a drawing I made at the end of 2021 for a competition between our Generic teams. The theme was \'Japan\'. I chose the mythological God of Japan, the Dragon King. This piece is purposely made to imitate the characteristics found in traditional Japanese visual arts — with yellowish tone and texture of rice paper, and a panoramic view with no fixed perspective.',
+    },
+    {
+      id: '5',
+      title: '"Wandering Samurai"',
+      description: 'Drawing of Kaedehara Kazuha from Genshin Impact.',
+      imageUrl: w5,
+      category: 'Digital Art',
+      detail: 'Drawing of \'Kaedehara Kazuha\', a samurai character from Genshin Impact.',
+    },
+    {
+      id: '6',
+      title: '"Lone Yaksha, Conqueror of Demons"',
+      description: 'Drawing of Xiao from Genshin Impact — a defender of Liyue.',
+      imageUrl: w6,
+      category: 'Digital Art',
+      detail: 'Drawing of Xiao (of Genshin Impact), a defender of Liyue who suffers from karmic debt due to millennia of killings.',
+    },
+    {
+      id: '7',
+      title: '"That Mean, Overworked Senior..."',
+      description: 'Character study experimenting with perspective and coloring over lineart.',
+      imageUrl: w7,
+      category: 'Digital Art',
+      detail: 'Experimenting with perspective and colors, and trying out coloring on top of the lineart layer.',
+    },
+    {
+      id: '8',
+      title: 'Character Design',
+      description: 'Original character design based on Dusun cultural elements.',
+      imageUrl: w8,
+      category: 'Character Design',
+      detail: 'Trying out designing a character based on Dusun cultures. Features a strung hat (stylized) as head gear, dalai seeds as beads, botungkat as belt, and bold expressions.',
+    },
+    {
+      id: '9',
+      title: 'Poses Study',
+      description: 'Pose studies featuring three athletes: baseball, figure skating, and Muay Thai.',
+      imageUrl: w9,
+      category: 'Illustration',
+      detail: 'A poses study featuring three different athletic poses — a baseball player, a figure skater, and a Muay Thai fighter — exploring dynamic movement and form.',
+    },
   ],
   services: [
-    { id: '1', title: 'Motion Graphics', description: 'Eye-catching graphics that move with purpose', icon: 'Layers', features: ['Explainer Videos', 'Logo Animation', 'Title Sequences', 'Kinetic Typography'] },
-    { id: '2', title: 'Character Animation', description: 'Bringing characters to life with personality', icon: 'Sparkles', features: ['2D Character Rigging', '3D Characters', 'Lip Sync', 'Walk Cycles'] },
-    { id: '3', title: '3D Animation', description: 'Dimensional storytelling in virtual space', icon: 'Globe', features: ['Product Visualization', 'Environment Design', 'Abstract 3D', 'Modeling & Texturing'] },
-    { id: '4', title: 'Visual Effects', description: 'Seamless integration of the impossible', icon: 'Film', features: ['Compositing', 'Particle Effects', 'Color Grading', 'Green Screen'] },
-    { id: '5', title: 'Brand Identity', description: 'Cohesive visual systems in motion', icon: 'Palette', features: ['Style Guides', 'Brand Animation', 'Social Media Content', 'Templates'] },
-    { id: '6', title: 'Video Editing', description: 'Crafting compelling narratives from footage', icon: 'Video', features: ['Short Form', 'Long Form', 'Sound Design', 'Post Production'] },
+    { id: '1', title: 'Digital Illustration', description: 'Character art, fan art, and original illustrations', icon: 'Palette', features: ['Character Design', 'Fan Art', 'Original Art', 'Full Colour'] },
+    { id: '2', title: 'Short Comics', description: 'Sequential art and short comic narratives', icon: 'Layers', features: ['Storyboarding', 'Panelling', 'Lettering', 'Black & White / Colour'] },
+    { id: '3', title: 'Short Animation', description: 'Simple animations and animated shorts', icon: 'Film', features: ['Frame-by-frame', '2D Animation', 'Character Animation', 'Short Clips'] },
+    { id: '4', title: 'Commission Art', description: 'Custom artwork created to your specifications', icon: 'Sparkles', features: ['Portrait', 'Full Body', 'Scene', 'OC Drawing'] },
   ],
   skills: [
-    { id: '1', name: 'After Effects', level: 95, category: 'Software' },
-    { id: '2', name: 'Cinema 4D', level: 88, category: 'Software' },
-    { id: '3', name: 'Blender', level: 85, category: 'Software' },
-    { id: '4', name: 'Illustrator', level: 92, category: 'Software' },
-    { id: '5', name: 'Premiere Pro', level: 90, category: 'Software' },
-    { id: '6', name: 'Character Animation', level: 87, category: 'Technique' },
-    { id: '7', name: 'Motion Graphics', level: 93, category: 'Technique' },
-    { id: '8', name: '3D Animation', level: 82, category: 'Technique' },
-    { id: '9', name: 'VFX Compositing', level: 85, category: 'Technique' },
-    { id: '10', name: 'Storyboarding', level: 88, category: 'Technique' },
+    { id: '1', name: 'Clip Studio Paint', level: 92, category: 'Software' },
+    { id: '2', name: 'Procreate', level: 85, category: 'Software' },
+    { id: '3', name: 'Adobe Photoshop', level: 78, category: 'Software' },
+    { id: '4', name: 'Digital Illustration', level: 90, category: 'Technique' },
+    { id: '5', name: 'Character Design', level: 85, category: 'Technique' },
+    { id: '6', name: 'Comic Storytelling', level: 88, category: 'Technique' },
+    { id: '7', name: 'Frame-by-frame Animation', level: 75, category: 'Technique' },
+    { id: '8', name: 'Traditional Drawing', level: 82, category: 'Technique' },
   ],
-  testimonials: [
-    { id: '1', name: 'Sarah Chen', role: 'Creative Director', company: 'Pixel Studios', text: 'Working with this animator transformed our vision into reality. The attention to detail and artistic flair exceeded all expectations.', rating: 5, avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100' },
-    { id: '2', name: 'Marcus Rodriguez', role: 'Marketing Lead', company: 'Brand Dynamics', text: 'Incredible talent and professionalism. The animations brought our campaign to life and engagement skyrocketed.', rating: 5, avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100' },
-    { id: '3', name: 'Emily Watson', role: 'Film Producer', company: 'Indie Films Co', text: 'A true artist who understands storytelling through motion. Every frame is crafted with purpose and beauty.', rating: 5, avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100' },
-  ],
+  testimonials: [],
   processSteps: [
-    { id: '1', title: 'Discovery', description: 'Understanding your vision, goals, and target audience to create a solid foundation.', icon: 'Lightbulb' },
-    { id: '2', title: 'Concept', description: 'Developing creative concepts, storyboards, and style frames that align with your brand.', icon: 'Pencil' },
-    { id: '3', title: 'Production', description: 'Bringing concepts to life through animation, sound design, and meticulous attention to detail.', icon: 'Rocket' },
-    { id: '4', title: 'Delivery', description: 'Final touches, revisions, and delivering polished animations ready for the world.', icon: 'CheckCircle' },
+    { id: '1', title: 'Concept', description: 'Sketching ideas and exploring composition, mood, and reference gathering.', icon: 'Lightbulb' },
+    { id: '2', title: 'Sketch', description: 'Rough line work and layout — building the foundation of the piece.', icon: 'Pencil' },
+    { id: '3', title: 'Lineart', description: 'Clean, refined line work that defines the final shapes and details.', icon: 'Star' },
+    { id: '4', title: 'Colour & Finish', description: 'Applying colour, shading, lighting, and final polish to bring it to life.', icon: 'CheckCircle' },
   ],
   contact: {
-    email: 'hello@example.com',
+    email: 'aurora@example.com',
     github: 'https://github.com/rayynaldgitau',
     linkedin: '#',
+    tiktok: 'https://tiktok.com/@meispupo',
+    instagram: '#',
   },
-  footer: { text: '© 2026 All Rights Reserved' },
+  footer: { text: '© 2026 Aurora. All Rights Reserved.' },
 };
 
 const STORAGE_KEY = 'portfolio_content';

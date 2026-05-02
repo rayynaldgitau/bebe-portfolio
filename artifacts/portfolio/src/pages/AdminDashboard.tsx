@@ -399,6 +399,14 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
                         <input className={inputCls} type="email" value={draft.contact.email} onChange={e => update('contact.email', e.target.value)} placeholder="hello@example.com" />
                       </div>
                       <div>
+                        <label className={labelCls}>TikTok URL</label>
+                        <input className={inputCls} value={(draft.contact as any).tiktok ?? ''} onChange={e => update('contact.tiktok', e.target.value)} placeholder="https://tiktok.com/@username" />
+                      </div>
+                      <div>
+                        <label className={labelCls}>Instagram URL</label>
+                        <input className={inputCls} value={(draft.contact as any).instagram ?? ''} onChange={e => update('contact.instagram', e.target.value)} placeholder="https://instagram.com/username" />
+                      </div>
+                      <div>
                         <label className={labelCls}>GitHub URL</label>
                         <input className={inputCls} value={draft.contact.github} onChange={e => update('contact.github', e.target.value)} placeholder="https://github.com/username" />
                       </div>

@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, ReactNode } from 'react';
-import { cover, aboutPage, w1, w2, w3, w4, w5, w6, w7, w8, w9 } from '../lib/artworkImages';
+import { aboutPage, w1, w2, w3, w4, w5, w6, w7, w8, w9 } from '../lib/artworkImages';
 
 export interface ProjectSection {
   images: string[];
@@ -112,7 +112,7 @@ const DEFAULT_CONTENT: PortfolioContent = {
   hero: {
     title: "Bahleyh's",
     subtitle: 'DIGITAL ART PORTFOLIO',
-    coverImage: cover,
+    coverImage: '',
   },
   showreel: {
     title: 'Animation Showreel',
@@ -320,11 +320,16 @@ export function ContentProvider({ children }: { children: ReactNode }) {
         ) {
           about.text = DEFAULT_CONTENT.about.text;
         }
+        const hero = { ...DEFAULT_CONTENT.hero, ...(p.hero ?? {}) };
+        // Migration: clear bundled asset cover images (not user-uploaded data URLs)
+        if (hero.coverImage && !hero.coverImage.startsWith('data:')) {
+          hero.coverImage = '';
+        }
         return {
           ...DEFAULT_CONTENT,
           ...p,
           nav:      { ...DEFAULT_CONTENT.nav,      ...(p.nav      ?? {}) },
-          hero:     { ...DEFAULT_CONTENT.hero,     ...(p.hero     ?? {}) },
+          hero,
           showreel: { ...DEFAULT_CONTENT.showreel, ...(p.showreel ?? {}) },
           about,
           contact:  { ...DEFAULT_CONTENT.contact,  ...(p.contact  ?? {}) },

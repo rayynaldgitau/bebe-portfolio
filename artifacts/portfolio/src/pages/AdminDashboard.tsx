@@ -206,6 +206,53 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
                         <label className={labelCls}>Subtitle</label>
                         <textarea className={inputCls} rows={3} value={draft.hero.subtitle} onChange={e => update('hero.subtitle', e.target.value)} />
                       </div>
+                      <div>
+                        <label className={labelCls}>Cover Image</label>
+                        <div className="flex items-start gap-5 mt-1">
+                          {draft.hero.coverImage ? (
+                            <div style={{ width: 120, height: 80, borderRadius: 8, overflow: 'hidden', border: '2px solid #6B1D2A', flexShrink: 0 }}>
+                              <img src={draft.hero.coverImage} alt="Cover preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                            </div>
+                          ) : (
+                            <div style={{ width: 120, height: 80, borderRadius: 8, border: '2px dashed #4B5563', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, backgroundColor: '#1F2937' }}>
+                              <span className="text-xs text-gray-500">No image</span>
+                            </div>
+                          )}
+                          <div className="flex flex-col gap-2">
+                            <label className="cursor-pointer inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-white transition" style={{ backgroundColor: '#374151' }}
+                              onMouseEnter={e => (e.currentTarget.style.backgroundColor = '#4B5563')}
+                              onMouseLeave={e => (e.currentTarget.style.backgroundColor = '#374151')}
+                            >
+                              Upload Image
+                              <input
+                                type="file"
+                                accept="image/*"
+                                className="hidden"
+                                onChange={e => {
+                                  const file = e.target.files?.[0];
+                                  if (!file) return;
+                                  const reader = new FileReader();
+                                  reader.onload = ev => {
+                                    const b64 = ev.target?.result as string;
+                                    setDraft(p => ({ ...p, hero: { ...p.hero, coverImage: b64 } }));
+                                  };
+                                  reader.readAsDataURL(file);
+                                }}
+                              />
+                            </label>
+                            {draft.hero.coverImage && (
+                              <button
+                                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-red-400 transition"
+                                style={{ backgroundColor: '#1F2937' }}
+                                onClick={() => setDraft(p => ({ ...p, hero: { ...p.hero, coverImage: '' } }))}
+                              >
+                                Remove
+                              </button>
+                            )}
+                          </div>
+                        </div>
+                        <p className="text-xs text-gray-500 mt-2">Optional. Shown as a card above your name on the homepage. Leave blank for a clean text-only hero.</p>
+                      </div>
                     </div>
                   </div>
 

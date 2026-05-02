@@ -522,24 +522,26 @@ export default function Portfolio() {
         className="min-h-screen flex flex-col items-center justify-center pt-20 pb-16 px-6 relative overflow-hidden"
         style={{ backgroundColor: SAND }}
       >
-        <motion.div
-          className="relative mb-8"
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-        >
-          <div
-            className="rounded-lg overflow-hidden shadow-2xl"
-            style={{ maxWidth: '520px', width: '100%' }}
+        {content.hero.coverImage && (
+          <motion.div
+            className="relative mb-8"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
           >
-            <img
-              src={content.hero.coverImage}
-              alt="Aurora's portfolio cover"
-              className="w-full object-cover"
-              style={{ maxHeight: '340px', objectFit: 'cover', objectPosition: 'center top' }}
-            />
-          </div>
-        </motion.div>
+            <div
+              className="rounded-lg overflow-hidden shadow-2xl"
+              style={{ maxWidth: '520px', width: '100%' }}
+            >
+              <img
+                src={content.hero.coverImage}
+                alt="Hero cover"
+                className="w-full object-cover"
+                style={{ maxHeight: '340px', objectFit: 'cover', objectPosition: 'center top' }}
+              />
+            </div>
+          </motion.div>
+        )}
 
         <motion.div
           className="text-center"

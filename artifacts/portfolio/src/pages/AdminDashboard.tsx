@@ -12,12 +12,13 @@ interface AdminDashboardProps {
   onLogout: () => void;
 }
 
-type TabId = 'general' | 'projects' | 'services' | 'skills' | 'stats' | 'testimonials' | 'process' | 'commissions' | 'roughAnimations' | 'contact' | 'security';
+type TabId = 'general' | 'projects' | 'illustrations' | 'services' | 'skills' | 'stats' | 'testimonials' | 'process' | 'commissions' | 'roughAnimations' | 'contact' | 'security';
 
 const TABS: { id: TabId; label: string; icon: any }[] = [
   { id: 'general', label: 'General', icon: LayoutDashboard },
   { id: 'projects', label: 'Projects', icon: Image },
   { id: 'commissions', label: 'Commissions', icon: Star },
+  { id: 'illustrations', label: 'Illustrations', icon: Image },
   { id: 'roughAnimations', label: 'Rough Animations', icon: Image },
   { id: 'skills', label: 'Skills', icon: BarChart2 },
   { id: 'stats', label: 'Stats', icon: Users },
@@ -528,6 +529,99 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
                       </div>
                     </CollapsibleCard>
                   ))}
+                </div>
+              )}
+
+              {/* ILLUSTRATIONS */}
+              {activeTab === 'illustrations' && (
+                <div className="space-y-4 max-w-2xl">
+                  <div className="flex justify-between items-center">
+                    <p className="text-gray-400 text-sm">{(draft.illustrations ?? []).length} illustration{(draft.illustrations ?? []).length !== 1 ? 's' : ''}</p>
+                    <label
+                      className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-white cursor-pointer transition"
+                      style={{ backgroundColor: '#6B1D2A' }}
+                    >
+                      + Add Illustration
+                      <input
+                        type="file"
+                        accept="image/*"
+                        multiple
+                        className="hidden"
+                        onChange={e => {
+                          Array.from(e.target.files ?? []).forEach(file => {
+                            const reader = new FileReader();
+                            reader.onload = ev => {
+                              const b64 = ev.target?.result as string;
+                              setDraft(p => ({
+                                ...p,
+                                illustrations: [...(p.illustrations ?? []), { id: uid(), imageUrl: b64, caption: '' }],
+                              }));
+                            };
+                            reader.readAsDataURL(file);
+                          });
+                          e.target.value = '';
+                        }}
+                      />
+                    </label>
+                  </div>
+                  <p className="text-xs text-gray-500">Upload illustration images and add a caption for each (e.g. which project it's from). This section is hidden until at least one image is added.</p>
+                  {(draft.illustrations ?? []).length === 0 && (
+                    <div className="bg-gray-900 rounded-xl p-8 border border-gray-800 text-center text-gray-500 text-sm">
+                      No illustrations yet. Click "+ Add Illustration" to upload images.
+                    </div>
+                  )}
+                  <div className="grid grid-cols-2 gap-3">
+                    {(draft.illustrations ?? []).map((ill, i) => (
+                      <div key={ill.id} className="bg-gray-900 rounded-xl border border-gray-800 overflow-hidden">
+                        <div className="relative group" style={{ aspectRatio: '3/4' }}>
+                          <img src={ill.imageUrl} alt="" className="w-full h-full object-cover" />
+                          <button
+                            className="absolute top-2 right-2 w-7 h-7 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition text-xs font-bold"
+                            style={{ backgroundColor: 'rgba(220,38,38,0.9)', color: '#fff' }}
+                            onClick={() => setDraft(p => ({ ...p, illustrations: (p.illustrations ?? []).filter(il => il.id !== ill.id) }))}
+                          >
+                            ✕
+                          </button>
+                          <label
+                            className="absolute bottom-2 left-2 px-2 py-1 rounded text-xs cursor-pointer opacity-0 group-hover:opacity-100 transition"
+                            style={{ backgroundColor: 'rgba(0,0,0,0.7)', color: '#fff' }}
+                          >
+                            Replace
+                            <input
+                              type="file"
+                              accept="image/*"
+                              className="hidden"
+                              onChange={e => {
+                                const file = e.target.files?.[0];
+                                if (!file) return;
+                                const reader = new FileReader();
+                                reader.onload = ev => {
+                                  const b64 = ev.target?.result as string;
+                                  setDraft(p => ({
+                                    ...p,
+                                    illustrations: (p.illustrations ?? []).map(il => il.id === ill.id ? { ...il, imageUrl: b64 } : il),
+                                  }));
+                                };
+                                reader.readAsDataURL(file);
+                              }}
+                            />
+                          </label>
+                        </div>
+                        <div className="p-3">
+                          <label className={labelCls}>Caption <span className="text-gray-600">(e.g. from which project)</span></label>
+                          <input
+                            className={inputCls}
+                            value={ill.caption}
+                            placeholder="e.g. From — Xiao and Venti's Flute"
+                            onChange={e => setDraft(p => ({
+                              ...p,
+                              illustrations: (p.illustrations ?? []).map(il => il.id === ill.id ? { ...il, caption: e.target.value } : il),
+                            }))}
+                          />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               )}
 

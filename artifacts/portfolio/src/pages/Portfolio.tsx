@@ -332,67 +332,95 @@ function WorkCard({ work, index }: { work: Project; index: number }) {
   );
 }
 
-function IllustrationCard({ img, projectTitle, projectId, index }: {
-  img: string; projectTitle: string; projectId: string; index: number;
+function IllustrationCard({ imageUrl, caption, index, onLightbox }: {
+  imageUrl: string; caption: string; index: number; onLightbox: (src: string) => void;
 }) {
   const [hovered, setHovered] = useState(false);
-  const [, setLocation] = useLocation();
 
   return (
     <motion.div
-      className="relative overflow-hidden cursor-pointer rounded-xl"
+      className="relative overflow-hidden rounded-xl cursor-zoom-in"
       initial={{ opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ delay: index * 0.05, duration: 0.5 }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      onClick={() => setLocation(`/works/${projectId}`)}
+      onClick={() => onLightbox(imageUrl)}
     >
       <div className="overflow-hidden" style={{ aspectRatio: '3/4' }}>
         <motion.img
-          src={img}
-          alt={projectTitle}
+          src={imageUrl}
+          alt={caption || 'Illustration'}
           className="w-full h-full object-cover"
           animate={{ scale: hovered ? 1.06 : 1 }}
           transition={{ duration: 0.45 }}
         />
       </div>
 
-      <AnimatePresence>
-        {hovered && (
-          <motion.div
-            className="absolute inset-0 flex flex-col justify-end p-4"
-            style={{ background: 'linear-gradient(to top, rgba(61,43,31,0.88) 0%, rgba(61,43,31,0.3) 55%, transparent 100%)' }}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-          >
-            <p className="text-xs mb-1 tracking-widest uppercase" style={{ color: SAND, fontFamily: SANS, letterSpacing: '0.2em' }}>
-              From project
-            </p>
-            <p className="text-sm font-medium leading-snug" style={{ color: CREAM, fontFamily: SERIF, fontStyle: 'italic' }}>
-              {projectTitle}
-            </p>
-            <p className="text-xs mt-1.5 opacity-60" style={{ color: SAND, fontFamily: SANS }}>
-              View project →
-            </p>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* static caption strip always visible */}
-      <div
-        className="px-3 py-2"
-        style={{ backgroundColor: 'rgba(245,240,232,0.92)' }}
-      >
-        <p className="text-xs truncate" style={{ fontFamily: SANS, color: BROWN_LIGHT }}>
-          <span className="opacity-50 mr-1">from</span>
-          <span style={{ color: MAROON }}>{projectTitle}</span>
-        </p>
-      </div>
+      {caption && (
+        <div
+          className="px-3 py-2"
+          style={{ backgroundColor: 'rgba(245,240,232,0.95)' }}
+        >
+          <p className="text-xs truncate" style={{ fontFamily: SANS, color: BROWN_LIGHT }}>
+            {caption}
+          </p>
+        </div>
+      )}
     </motion.div>
+  );
+}
+
+function IllustrationsSection({ items }: { items: { id: string; imageUrl: string; caption: string }[] }) {
+  const [lightbox, setLightbox] = useState<string | null>(null);
+
+  return (
+    <section id="illustrations" className="py-20 px-6 md:px-12" style={{ backgroundColor: SAND_LIGHT }}>
+      {lightbox && (
+        <motion.div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4 md:p-10"
+          initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+          onClick={() => setLightbox(null)}
+        >
+          <img src={lightbox} alt="" className="max-w-full max-h-full rounded-xl object-contain shadow-2xl" />
+          <button
+            className="absolute top-5 right-5 w-10 h-10 rounded-full flex items-center justify-center text-white"
+            style={{ backgroundColor: 'rgba(255,255,255,0.15)' }}
+            onClick={() => setLightbox(null)}
+          >✕</button>
+        </motion.div>
+      )}
+
+      <div className="max-w-6xl mx-auto">
+        <motion.div
+          className="mb-12"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+        >
+          <h2 className="text-4xl md:text-5xl mb-2" style={{ fontFamily: SERIF, color: BROWN, fontStyle: 'italic' }}>
+            Illustrations
+          </h2>
+          <div className="w-12 h-px mt-4" style={{ backgroundColor: MAROON }} />
+        </motion.div>
+
+        <div
+          className="grid gap-4"
+          style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))' }}
+        >
+          {items.map((ill, i) => (
+            <IllustrationCard
+              key={ill.id}
+              imageUrl={ill.imageUrl}
+              caption={ill.caption}
+              index={i}
+              onLightbox={setLightbox}
+            />
+          ))}
+        </div>
+      </div>
+    </section>
   );
 }
 
@@ -804,43 +832,10 @@ export default function Portfolio() {
 
       {/* ── ILLUSTRATIONS ── */}
       {(() => {
-        const items: { img: string; projectId: string; projectTitle: string }[] = [];
-        content.projects.forEach(p => {
-          const imgs: string[] = (p.sections as any)?.illustrations?.images ?? [];
-          imgs.forEach(img => items.push({ img, projectId: p.id, projectTitle: p.title }));
-        });
+        const items = content.illustrations ?? [];
         if (items.length === 0) return null;
         return (
-          <section id="illustrations" className="py-20 px-6 md:px-12" style={{ backgroundColor: SAND_LIGHT }}>
-            <div className="max-w-6xl mx-auto">
-              <motion.div
-                className="mb-12"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-              >
-                <h2 className="text-4xl md:text-5xl mb-2" style={{ fontFamily: SERIF, color: BROWN, fontStyle: 'italic' }}>
-                  Illustrations
-                </h2>
-                <div className="w-12 h-px mt-4" style={{ backgroundColor: MAROON }} />
-              </motion.div>
-
-              <div
-                className="grid gap-4"
-                style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))' }}
-              >
-                {items.map((item, i) => (
-                  <IllustrationCard
-                    key={`${item.projectId}-${i}`}
-                    img={item.img}
-                    projectTitle={item.projectTitle}
-                    projectId={item.projectId}
-                    index={i}
-                  />
-                ))}
-              </div>
-            </div>
-          </section>
+          <IllustrationsSection items={items} />
         );
       })()}
 

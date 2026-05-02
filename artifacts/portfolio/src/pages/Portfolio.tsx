@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { X, ExternalLink, Mail, Github, Settings, Send } from 'lucide-react';
+import { useLocation } from 'wouter';
 import { useContent } from '../context/ContentContext';
 
 function CommissionForm({ email, tiers }: { email: string; tiers: string[] }) {
@@ -282,55 +283,52 @@ function WorkModal({ work, onClose }: { work: Project; onClose: () => void }) {
 
 function WorkCard({ work, index }: { work: Project; index: number }) {
   const [hovered, setHovered] = useState(false);
-  const [modalOpen, setModalOpen] = useState(false);
+  const [, setLocation] = useLocation();
 
   return (
-    <>
-      <motion.div
-        className="relative overflow-hidden cursor-pointer"
-        style={{ borderRadius: '4px' }}
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ delay: index * 0.07, duration: 0.5 }}
-        onMouseEnter={() => setHovered(true)}
-        onMouseLeave={() => setHovered(false)}
-        onClick={() => setModalOpen(true)}
-      >
-        <div className="aspect-[3/4] overflow-hidden">
-          <motion.img
-            src={work.imageUrl}
-            alt={work.title}
-            className="w-full h-full object-cover"
-            animate={{ scale: hovered ? 1.06 : 1 }}
-            transition={{ duration: 0.5 }}
-          />
-        </div>
-        <AnimatePresence>
-          {hovered && (
-            <motion.div
-              className="absolute inset-0 flex flex-col justify-end p-4"
-              style={{ background: 'linear-gradient(to top, rgba(107,29,42,0.92) 0%, rgba(107,29,42,0.4) 60%, transparent 100%)' }}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-            >
-              <span className="text-xs font-bold tracking-widest uppercase mb-1" style={{ color: SAND, fontFamily: SANS }}>
-                {work.category}
-              </span>
-              <p className="text-sm font-medium leading-snug" style={{ color: CREAM, fontFamily: SERIF }}>
-                {work.title}
-              </p>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </motion.div>
-
+    <motion.div
+      className="relative overflow-hidden cursor-pointer"
+      style={{ borderRadius: '4px' }}
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ delay: index * 0.07, duration: 0.5 }}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      onClick={() => setLocation(`/works/${work.id}`)}
+    >
+      <div className="aspect-[3/4] overflow-hidden">
+        <motion.img
+          src={work.imageUrl}
+          alt={work.title}
+          className="w-full h-full object-cover"
+          animate={{ scale: hovered ? 1.06 : 1 }}
+          transition={{ duration: 0.5 }}
+        />
+      </div>
       <AnimatePresence>
-        {modalOpen && <WorkModal work={work} onClose={() => setModalOpen(false)} />}
+        {hovered && (
+          <motion.div
+            className="absolute inset-0 flex flex-col justify-end p-4"
+            style={{ background: 'linear-gradient(to top, rgba(107,29,42,0.92) 0%, rgba(107,29,42,0.4) 60%, transparent 100%)' }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+          >
+            <span className="text-xs font-bold tracking-widest uppercase mb-1" style={{ color: SAND, fontFamily: SANS }}>
+              {work.category}
+            </span>
+            <p className="text-sm font-medium leading-snug" style={{ color: CREAM, fontFamily: SERIF }}>
+              {work.title}
+            </p>
+            <p className="text-xs mt-1 opacity-70" style={{ color: SAND, fontFamily: SANS }}>
+              View project →
+            </p>
+          </motion.div>
+        )}
       </AnimatePresence>
-    </>
+    </motion.div>
   );
 }
 

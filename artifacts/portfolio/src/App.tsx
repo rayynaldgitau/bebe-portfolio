@@ -4,6 +4,7 @@ import { ContentProvider } from './context/ContentContext';
 import Portfolio from './pages/Portfolio';
 import AdminLogin from './pages/AdminLogin';
 import AdminDashboard from './pages/AdminDashboard';
+import WorkPage from './pages/WorkPage';
 
 function AdminRoute() {
   const [authed, setAuthed] = useState(false);
@@ -17,6 +18,7 @@ export default function App() {
     <ContentProvider>
       <Switch>
         <Route path="/admin" component={AdminRoute} />
+        <Route path="/works/:id" component={WorkPage} />
         <Route path="/" component={Portfolio} />
         <Route component={Portfolio} />
       </Switch>

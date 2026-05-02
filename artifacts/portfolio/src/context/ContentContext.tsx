@@ -65,9 +65,9 @@ export interface PortfolioContent {
 }
 
 const DEFAULT_CONTENT: PortfolioContent = {
-  nav: { brandName: "Aurora's" },
+  nav: { brandName: "Bahleyh's" },
   hero: {
-    title: "Aurora's",
+    title: "Bahleyh's",
     subtitle: 'DIGITAL ART PORTFOLIO',
     coverImage: cover,
   },
@@ -185,7 +185,7 @@ const DEFAULT_CONTENT: PortfolioContent = {
     tiktok: 'https://tiktok.com/@meispupo',
     instagram: '#',
   },
-  footer: { text: '© 2026 Aurora. All Rights Reserved.' },
+  footer: { text: '© 2026 Bahleyh. All Rights Reserved.' },
 };
 
 const STORAGE_KEY = 'portfolio_content';

@@ -499,87 +499,75 @@ export default function Portfolio() {
       })()}
 
       {/* ── ABOUT ── */}
-      <section id="about" className="flex flex-col md:flex-row min-h-[60vh]">
-        {/* Left — text */}
-        <div
-          className="flex-1 flex flex-col justify-center px-10 md:px-16 py-16"
-          style={{ backgroundColor: SAND_LIGHT }}
-        >
-          <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7 }}
-          >
-            {/* Profile picture */}
-            {(content.about as any).profileImage && (
-              <div className="mb-8 flex items-center gap-5">
-                <div
-                  className="shrink-0"
-                  style={{
-                    width: 88, height: 88, borderRadius: '50%',
-                    border: `3px solid ${MAROON}`,
-                    boxShadow: `0 0 0 5px rgba(107,29,42,0.12)`,
-                    overflow: 'hidden',
-                  }}
-                >
+      <section id="about" style={{ backgroundColor: SAND_LIGHT }}>
+        <div className="max-w-5xl mx-auto px-6 md:px-12 py-20 md:py-28">
+          <div className="flex flex-col md:flex-row items-center gap-12 md:gap-16">
+
+            {/* Profile photo */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.92 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.7 }}
+              className="shrink-0 flex flex-col items-center gap-4"
+            >
+              <div
+                style={{
+                  width: 200, height: 200, borderRadius: '50%',
+                  border: `4px solid ${MAROON}`,
+                  boxShadow: `0 0 0 8px rgba(107,29,42,0.1), 0 16px 40px rgba(61,43,31,0.15)`,
+                  overflow: 'hidden',
+                  backgroundColor: '#D4C5B0',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                }}
+              >
+                {(content.about as any).profileImage ? (
                   <img
                     src={(content.about as any).profileImage}
-                    alt="Profile"
+                    alt="Bahleyh"
                     style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                   />
-                </div>
-                <div>
-                  <p className="font-semibold text-lg" style={{ fontFamily: SERIF, color: BROWN, fontStyle: 'italic' }}>
-                    Bahleyh
-                  </p>
-                  <p className="text-xs tracking-widest uppercase" style={{ color: MAROON, fontFamily: SANS, letterSpacing: '0.18em' }}>
-                    Digital Artist
-                  </p>
-                </div>
+                ) : (
+                  <span style={{ fontFamily: SERIF, fontSize: 72, color: MAROON, opacity: 0.35, fontStyle: 'italic', lineHeight: 1 }}>
+                    B
+                  </span>
+                )}
               </div>
-            )}
+              <div className="text-center">
+                <p style={{ fontFamily: SERIF, color: BROWN, fontStyle: 'italic', fontSize: '1.25rem' }}>
+                  Bahleyh
+                </p>
+                <p style={{ fontFamily: SANS, color: MAROON, fontSize: '0.7rem', letterSpacing: '0.2em', textTransform: 'uppercase', marginTop: 2 }}>
+                  Digital Artist
+                </p>
+              </div>
+            </motion.div>
 
-            <h2 className="text-5xl mb-8" style={{ fontFamily: SERIF, color: BROWN, fontStyle: 'italic' }}>
-              About Me
-            </h2>
-            {content.about.text.split('\n\n').map((para, i) => (
-              <p key={i} className="mb-4 leading-relaxed" style={{ color: BROWN_LIGHT, fontSize: '1rem' }}>
-                {para}
-              </p>
-            ))}
-            <div className="mt-8 flex items-center gap-2">
-              <div className="w-8 h-px" style={{ backgroundColor: MAROON }} />
-              <span className="text-xs tracking-widest uppercase" style={{ color: MAROON, fontFamily: SANS, letterSpacing: '0.2em' }}>
-                Pre-University · UNIMAS Foundation
-              </span>
-            </div>
-          </motion.div>
-        </div>
-
-        {/* Right — image panel */}
-        <div
-          className="flex-1 relative flex flex-col items-center justify-center px-10 py-16 gap-6"
-          style={{ backgroundColor: OLIVE }}
-        >
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7 }}
-            className="relative"
-          >
-            <div
-              className="rounded-xl overflow-hidden shadow-xl"
-              style={{ maxWidth: '340px', border: `3px solid rgba(245,240,232,0.25)` }}
+            {/* Text */}
+            <motion.div
+              initial={{ opacity: 0, x: 30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.7 }}
+              className="flex-1"
             >
-              <img
-                src={content.about.image}
-                alt="About Aurora"
-                className="w-full object-cover"
-              />
-            </div>
-          </motion.div>
+              <h2 className="text-5xl mb-8" style={{ fontFamily: SERIF, color: BROWN, fontStyle: 'italic' }}>
+                About Me
+              </h2>
+              {content.about.text.split('\n\n').map((para, i) => (
+                <p key={i} className="mb-4 leading-relaxed" style={{ color: BROWN_LIGHT, fontSize: '1rem' }}>
+                  {para}
+                </p>
+              ))}
+              <div className="mt-8 flex items-center gap-2">
+                <div className="w-8 h-px" style={{ backgroundColor: MAROON }} />
+                <span className="text-xs tracking-widest uppercase" style={{ color: MAROON, fontFamily: SANS, letterSpacing: '0.2em' }}>
+                  Pre-University · UNIMAS Foundation
+                </span>
+              </div>
+            </motion.div>
+
+          </div>
         </div>
       </section>
 

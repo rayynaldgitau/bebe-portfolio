@@ -375,89 +375,124 @@ export default function Portfolio() {
 
       {/* ── SHOWREEL ── */}
       {(() => {
-        const sr = (content as any).showreel;
-        if (!sr?.videoUrl) return null;
+        const sr = (content as any).showreel ?? {};
 
         const getEmbedUrl = (url: string): string | null => {
           const ytMatch = url.match(/(?:youtube\.com\/(?:[^/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?/\s]{11})/);
-          if (ytMatch) return `https://www.youtube.com/embed/${ytMatch[1]}?rel=0&modestbranding=1&autoplay=0`;
+          if (ytMatch) return `https://www.youtube.com/embed/${ytMatch[1]}?rel=0&modestbranding=1`;
           const vimeoMatch = url.match(/vimeo\.com\/(\d+)/);
           if (vimeoMatch) return `https://player.vimeo.com/video/${vimeoMatch[1]}`;
           return null;
         };
 
-        const embedUrl = getEmbedUrl(sr.videoUrl);
+        const embedUrl = sr.videoUrl ? getEmbedUrl(sr.videoUrl) : null;
 
         return (
-          <section id="showreel" style={{ backgroundColor: MAROON, color: CREAM }}>
-            <div className="max-w-5xl mx-auto px-6 py-20 md:py-28 flex flex-col items-center text-center">
+          <section id="showreel" style={{ backgroundColor: MAROON, color: CREAM, position: 'relative', overflow: 'hidden' }}>
+            {/* subtle texture overlay */}
+            <div style={{ position: 'absolute', inset: 0, backgroundImage: 'radial-gradient(ellipse at 80% 20%, rgba(255,255,255,0.04) 0%, transparent 60%)', pointerEvents: 'none' }} />
+
+            <div className="max-w-6xl mx-auto px-6 md:px-12 py-20 md:py-28">
+              {/* header */}
               <motion.div
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 24 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                className="mb-10 w-full"
+                className="text-center mb-12"
               >
                 <span
-                  className="text-xs tracking-widest uppercase mb-4 block opacity-60"
-                  style={{ fontFamily: SANS, letterSpacing: '0.3em' }}
+                  className="text-xs tracking-widest uppercase block mb-3"
+                  style={{ fontFamily: SANS, letterSpacing: '0.3em', color: 'rgba(245,240,232,0.5)' }}
                 >
-                  Featured Work
+                  Animation & Motion
                 </span>
                 <h2
-                  className="text-4xl md:text-5xl mb-4"
-                  style={{ fontFamily: SERIF, fontStyle: 'italic' }}
+                  className="text-5xl md:text-6xl mb-4"
+                  style={{ fontFamily: SERIF, fontStyle: 'italic', lineHeight: 1.1 }}
                 >
                   {sr.title || 'Animation Showreel'}
                 </h2>
-                {sr.description && (
-                  <p className="text-sm md:text-base opacity-70 max-w-xl mx-auto" style={{ fontFamily: SANS }}>
-                    {sr.description}
-                  </p>
+                <div style={{ width: 48, height: 2, backgroundColor: 'rgba(245,240,232,0.3)', margin: '16px auto' }} />
+                <p
+                  className="text-sm md:text-base max-w-lg mx-auto"
+                  style={{ fontFamily: SANS, color: 'rgba(245,240,232,0.65)', lineHeight: 1.7 }}
+                >
+                  {sr.description || 'A curated selection of animations and illustrated works.'}
+                </p>
+              </motion.div>
+
+              {/* video player */}
+              <motion.div
+                initial={{ opacity: 0, y: 32 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.7, delay: 0.1 }}
+                className="w-full rounded-2xl overflow-hidden"
+                style={{
+                  boxShadow: '0 32px 80px rgba(0,0,0,0.5)',
+                  border: '1px solid rgba(245,240,232,0.1)',
+                  aspectRatio: '16/9',
+                  position: 'relative',
+                  backgroundColor: 'rgba(0,0,0,0.35)',
+                }}
+              >
+                {embedUrl ? (
+                  <iframe
+                    src={embedUrl}
+                    title={sr.title || 'Showreel'}
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
+                    allowFullScreen
+                    style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', border: 'none' }}
+                  />
+                ) : sr.videoUrl ? (
+                  /* non-embeddable link */
+                  <a
+                    href={sr.videoUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="absolute inset-0 flex flex-col items-center justify-center gap-4 hover:bg-white/5 transition-colors"
+                  >
+                    <div
+                      className="w-20 h-20 rounded-full flex items-center justify-center"
+                      style={{ backgroundColor: 'rgba(245,240,232,0.12)', border: '2px solid rgba(245,240,232,0.25)' }}
+                    >
+                      <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" style={{ marginLeft: 4 }}>
+                        <path d="M8 5v14l11-7z" />
+                      </svg>
+                    </div>
+                    <span className="text-sm underline opacity-60" style={{ fontFamily: SANS }}>
+                      Watch on external site
+                    </span>
+                  </a>
+                ) : (
+                  /* placeholder — no URL yet */
+                  <div className="absolute inset-0 flex flex-col items-center justify-center gap-5">
+                    <div
+                      className="w-20 h-20 rounded-full flex items-center justify-center"
+                      style={{ backgroundColor: 'rgba(245,240,232,0.08)', border: '2px solid rgba(245,240,232,0.18)' }}
+                    >
+                      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" style={{ opacity: 0.5 }}>
+                        <polygon points="5,3 19,12 5,21" />
+                      </svg>
+                    </div>
+                    <div className="text-center">
+                      <p className="text-base mb-1" style={{ fontFamily: SERIF, fontStyle: 'italic', opacity: 0.7 }}>
+                        Showreel coming soon
+                      </p>
+                      <p className="text-xs opacity-35" style={{ fontFamily: SANS }}>
+                        Add your YouTube or Vimeo URL in the admin panel
+                      </p>
+                    </div>
+                  </div>
                 )}
               </motion.div>
 
-              <motion.div
-                initial={{ opacity: 0, scale: 0.97 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6 }}
-                className="w-full rounded-2xl overflow-hidden shadow-2xl"
-                style={{ border: `1px solid rgba(255,255,255,0.12)` }}
-              >
-                {embedUrl ? (
-                  <div style={{ position: 'relative', paddingBottom: '56.25%', height: 0 }}>
-                    <iframe
-                      src={embedUrl}
-                      title={sr.title || 'Showreel'}
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                      allowFullScreen
-                      style={{
-                        position: 'absolute', top: 0, left: 0,
-                        width: '100%', height: '100%', border: 'none',
-                      }}
-                    />
-                  </div>
-                ) : (
-                  <div
-                    className="flex flex-col items-center justify-center gap-3 py-24 px-8"
-                    style={{ backgroundColor: 'rgba(255,255,255,0.05)' }}
-                  >
-                    <ExternalLink className="w-8 h-8 opacity-40" />
-                    <a
-                      href={sr.videoUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-sm underline opacity-60 hover:opacity-100 transition-opacity"
-                      style={{ fontFamily: SANS }}
-                    >
-                      {sr.videoUrl}
-                    </a>
-                    <p className="text-xs opacity-40" style={{ fontFamily: SANS }}>
-                      Unsupported embed — opens in a new tab
-                    </p>
-                  </div>
-                )}
-              </motion.div>
+              {/* optional external link label */}
+              {sr.videoUrl && !embedUrl && (
+                <p className="text-center text-xs mt-4 opacity-40" style={{ fontFamily: SANS }}>
+                  {sr.videoUrl}
+                </p>
+              )}
             </div>
           </section>
         );
